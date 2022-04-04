@@ -85,6 +85,7 @@
 
 // globals
 volatile int pixel_buffer_start; // global variable
+int player_color = 0xD376D7;
 
 // prototypes
 void draw_player(int x, int y, int direction);
@@ -162,6 +163,52 @@ int main(void) {
 			byte3 = PS2_data & 0xFF;
 		}
 
+        // diagonal movement
+        if ((byte2 == D_PRESS && byte3 == W_PRESS) || (byte2 == W_PRESS && byte3 == D_PRESS)) { // W and D pressed, go diagonally up and right
+            if (player_pos[0] < X_BOUND-7 && player_pos[1] >= 7) {
+                boundary[player_pos[0]][player_pos[1]] = 0;
+                player_pos[0] = player_pos[0] + 1;
+                player_pos[1] = player_pos[1] - 1;
+                boundary[player_pos[0]][player_pos[1]] = 1;
+            }
+            direction = 0;
+            *RLEDs = 1;
+        }
+
+        if ((byte2 == A_PRESS && byte3 == W_PRESS) || (byte2 == W_PRESS && byte3 == A_PRESS)) { // W and A pressed, go diagonally up and left
+            if (player_pos[0] >= 7 && player_pos[1] >= 7) {
+                boundary[player_pos[0]][player_pos[1]] = 0;
+                player_pos[0] = player_pos[0] - 1;
+                player_pos[1] = player_pos[1] - 1;
+                boundary[player_pos[0]][player_pos[1]] = 1;
+            }
+            direction = 0;
+            *RLEDs = 1;
+        }
+
+        if ((byte3 == S_PRESS && byte2 == A_PRESS) || (byte2 == S_PRESS && byte3 == A_PRESS)) { // S and A pressed, go down and left
+            if (player_pos[0] >=7 && player_pos[1] < Y_BOUND-7) {
+                boundary[player_pos[0]][player_pos[1]] = 0;
+                player_pos[1] = player_pos[1] + 1;
+                player_pos[0] = player_pos[0] - 1;
+                boundary[player_pos[0]][player_pos[1]] = 1;
+            }
+            direction = 1;
+            *RLEDs = 2;
+        }
+
+        if ((byte3 == S_PRESS && byte2 == D_PRESS) || (byte2 == S_PRESS && byte3 == D_PRESS)) { // S and D pressed, go down and right
+            if (player_pos[1] < Y_BOUND-7 && player_pos[0] < X_BOUND-7) {
+                boundary[player_pos[0]][player_pos[1]] = 0;
+                player_pos[1] = player_pos[1] + 1;
+                player_pos[0] = player_pos[0] + 1;
+                boundary[player_pos[0]][player_pos[1]] = 1;
+            }
+            direction = 1;
+            *RLEDs = 2;
+        }
+
+        // standard movement
         if (byte3 == W_PRESS) { // W pressed, go up
             if (player_pos[1] >= 7) {
                 boundary[player_pos[0]][player_pos[1]] = 0;
@@ -198,6 +245,7 @@ int main(void) {
             direction = 3;
             *RLEDs = 8;
         }
+
         wait_for_vsync(); // swap front and back buffers on VGA vertical sync
         pixel_buffer_start = *(pixel_ctrl_ptr + 1); // new back buffer
 
@@ -213,16 +261,16 @@ int main(void) {
 void draw_player(int x, int y, int direction) {
 
     if (direction == 0) { // player looking up
-        draw_box(x, y, 0xD376D7);
+        draw_box(x, y, player_color);
     }
     if (direction == 1) { // player looking down
-        draw_box(x, y, 0xD376D7);
+        draw_box(x, y, player_color);
     }
     if (direction == 2) { // player looking left
-        draw_box(x, y, 0xD376D7);
+        draw_box(x, y, player_color);
     }
     if (direction == 3) { // player looking right
-        draw_box(x, y, 0xD376D7);
+        draw_box(x, y, player_color);
     }
     plot_pixel(x,y,0x0);
 }
@@ -308,6 +356,5 @@ void draw_box(int x, int y, short int color) {
             plot_pixel(x+i, y-j, color);
             plot_pixel(x+i, y+j, color);
         }
-
     }
 }
