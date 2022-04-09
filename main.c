@@ -268,10 +268,18 @@ int main(void) {
 
 // make new zombie struct
 struct zombie spawn_zombie(int zombie_id) {
-    int x_spawn = rand() % (X_BOUND-7);
-    int y_spawn = rand() % (Y_BOUND-7);
+    int x_spawn = rand() % (X_BOUND-7 + 1 - 7) + 7;
+    int y_spawn = rand() % (Y_BOUND-7 + 1 - 7) + 7;
     struct zombie z = {10+zombie_id, x_spawn, y_spawn, 0, 0, 0, 0, 0, 1, true};
-    boundary[x_spawn][y_spawn] = 10+zombie_id;
+    int i, j;
+    for (i = 0; i <= 6; i++) {
+        for (j = 0; j <= 6; j++) {
+            boundary[x_spawn-i][y_spawn-j] = 10+zombie_id;
+            boundary[x_spawn-i][y_spawn+j] = 10+zombie_id;
+            boundary[x_spawn+i][y_spawn-j] = 10+zombie_id;
+            boundary[x_spawn+i][y_spawn+j] = 10+zombie_id;
+        }
+    }
     return z;
 }
 
