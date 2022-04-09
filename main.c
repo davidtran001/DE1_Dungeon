@@ -82,12 +82,74 @@
 #define A_PRESS 0x1C
 #define S_PRESS 0x1B
 #define D_PRESS 0x23
+#define I_PRESS 0x43
+#define EMPTY_PRESS 0xF0
 
-// globals
+// boundary codes
+#define EMPTY_CODE 0
+#define PLAYER_CODE 1
+#define PROJECTILE_CODE 2
+#define ZOMBIE_CODE 3
+#define BARRELL_CODE 4
+
+// structs
+struct player {
+    int x;
+    int y;
+    int prev_x;
+    int prev_y;
+    int prev2_x;
+    int prev2_y;
+    int direction;
+    int health;
+};
+
+struct projectile {
+    int x;
+    int y;
+    int prev_x;
+    int prev_y;
+    int prev2_x;
+    int prev2_y;
+    int direction;
+    bool isActive;
+};
+
+struct zombie {
+    int x;
+    int y;
+    int prev_x;
+    int prev_y;
+    int prev2_x;
+    int prev2_y;
+    int direction;
+    int health;
+};
+
+struct barrell {
+    int x;
+    int y;
+};
+
+
+// global variables
 volatile int pixel_buffer_start; // global variable
 int player_color = 0xD376D7;
+int dx = 2;
+int dy = 2;
+int dx_projectile = 8;
+int dy_projectile = 8;
+int boundary[X_BOUND][Y_BOUND];
 
-// prototypes
+// global structs
+struct player player1 = {X_BOUND/2, Y_BOUND/2, X_BOUND/2, Y_BOUND/2, X_BOUND/2, Y_BOUND/2, 0, 100};
+struct projectile proj1 = {0,0,0,0,0,0,0,false};
+
+// function prototypes
+void save_twoframes(int *prev_pos_x, int *prev_pox_y, int *prev2_pos_x, int *prev2_pos_y, int x_pos, int y_pos);
+void draw_projectile(int x, int y);
+void shoot_projectile(int byte3, struct projectile *p, struct player play);
+void player_movement(int byte1, int byte2, int byte3, struct player *p);
 void draw_player(int x, int y, int direction);
 void wait_for_vsync();
 void clear_screen();
@@ -97,24 +159,15 @@ void plot_pixel(int x, int y, short int line_color);
 void draw_box(int x, int y, short int color);
 
 int main(void) {
-    int direction = 0; // 0 = up, 1 = down, 2 = left, 3 = right
-    int dx = 2;
-    int dy = 2;
-
     // game setup
-    // play boundary
-    int boundary[X_BOUND][Y_BOUND];
+    // boundary
     int i, j;
     for (i = 0; i < X_BOUND; i++) {
         for (j = 0; j < Y_BOUND; j++) {
-            boundary[i][j] = 0;
+            boundary[i][j] = EMPTY_CODE;
         }
     }
-    int player_pos[2] = {X_BOUND/2, Y_BOUND/2};
-    int prev_player_pos[2] = {X_BOUND/2, Y_BOUND/2};
-    int prev2_player_pos[2] = {X_BOUND/2, Y_BOUND/2};
-
-    boundary[player_pos[0]][player_pos[1]] = 1;
+    boundary[player1.x][player1.y] = 1;
 
     // setup PS/2 port
     unsigned char byte1 = 0;
@@ -140,18 +193,20 @@ int main(void) {
     pixel_buffer_start = *(pixel_ctrl_ptr + 1); // we draw on the back buffer
     clear_screen(); // pixel_buffer_start points to the pixel buffer
 
-    draw_player(player_pos[0], player_pos[1], direction);
+    draw_player(player1.x, player1.y, player1.direction);
 
     // main loop
     while (1) {
 
         // discard old drawings
-        draw_box(prev2_player_pos[0], prev2_player_pos[1], 0x0);
-        draw_player(player_pos[0], player_pos[1], direction);
-        prev2_player_pos[0] = prev_player_pos[0];
-        prev2_player_pos[1] = prev_player_pos[1];
-        prev_player_pos[0] = player_pos[0];
-        prev_player_pos[1] = player_pos[1];
+        draw_box(player1.prev2_x, player1.prev2_y, 0x0);
+        draw_player(player1.x, player1.y, player1.direction);
+        plot_pixel(proj1.prev2_x, proj1.prev2_y, 0x0);
+        draw_projectile(proj1.x, proj1.y);
+        
+        // save the position of a "object" two frames ago
+        save_twoframes(&player1.prev_x, &player1.prev_y, &player1.prev2_x, &player1.prev2_y, player1.x, player1.y);
+        save_twoframes(&proj1.prev_x, &proj1.prev_y, &proj1.prev2_x, &proj1.prev2_y, proj1.x, proj1.y);
 
         // PS/2 keyboard input
         PS2_data = *(PS2_ptr);	// read the Data register in the PS/2 port
@@ -161,90 +216,10 @@ int main(void) {
 			byte1 = byte2;
 			byte2 = byte3;
 			byte3 = PS2_data & 0xFF;
+            printf("byte1 is %d, byte2 is %d, byte3 is %d \n", byte1, byte2, byte3);
 		}
-
-        // diagonal movement
-        if ((byte2 == D_PRESS && byte3 == W_PRESS) || (byte2 == W_PRESS && byte3 == D_PRESS)) { // W and D pressed, go diagonally up and right
-            if (player_pos[0] < X_BOUND-7 && player_pos[1] >= 7) {
-                boundary[player_pos[0]][player_pos[1]] = 0;
-                player_pos[0] = player_pos[0] + 1;
-                player_pos[1] = player_pos[1] - 1;
-                boundary[player_pos[0]][player_pos[1]] = 1;
-            }
-            direction = 0;
-            *RLEDs = 1;
-        }
-
-        if ((byte2 == A_PRESS && byte3 == W_PRESS) || (byte2 == W_PRESS && byte3 == A_PRESS)) { // W and A pressed, go diagonally up and left
-            if (player_pos[0] >= 7 && player_pos[1] >= 7) {
-                boundary[player_pos[0]][player_pos[1]] = 0;
-                player_pos[0] = player_pos[0] - 1;
-                player_pos[1] = player_pos[1] - 1;
-                boundary[player_pos[0]][player_pos[1]] = 1;
-            }
-            direction = 0;
-            *RLEDs = 1;
-        }
-
-        if ((byte3 == S_PRESS && byte2 == A_PRESS) || (byte2 == S_PRESS && byte3 == A_PRESS)) { // S and A pressed, go down and left
-            if (player_pos[0] >=7 && player_pos[1] < Y_BOUND-7) {
-                boundary[player_pos[0]][player_pos[1]] = 0;
-                player_pos[1] = player_pos[1] + 1;
-                player_pos[0] = player_pos[0] - 1;
-                boundary[player_pos[0]][player_pos[1]] = 1;
-            }
-            direction = 1;
-            *RLEDs = 2;
-        }
-
-        if ((byte3 == S_PRESS && byte2 == D_PRESS) || (byte2 == S_PRESS && byte3 == D_PRESS)) { // S and D pressed, go down and right
-            if (player_pos[1] < Y_BOUND-7 && player_pos[0] < X_BOUND-7) {
-                boundary[player_pos[0]][player_pos[1]] = 0;
-                player_pos[1] = player_pos[1] + 1;
-                player_pos[0] = player_pos[0] + 1;
-                boundary[player_pos[0]][player_pos[1]] = 1;
-            }
-            direction = 1;
-            *RLEDs = 2;
-        }
-
-        // standard movement
-        if (byte3 == W_PRESS) { // W pressed, go up
-            if (player_pos[1] >= 7) {
-                boundary[player_pos[0]][player_pos[1]] = 0;
-                player_pos[1] = player_pos[1] - dy;
-                boundary[player_pos[0]][player_pos[1]] = 1;
-            } 
-            direction = 0;
-            *RLEDs = 1;
-        }
-        if (byte3 == S_PRESS) { // S pressed, go down
-            if (player_pos[1] < Y_BOUND-7) {
-                boundary[player_pos[0]][player_pos[1]] = 0;
-                player_pos[1] = player_pos[1] + dy;
-                boundary[player_pos[0]][player_pos[1]] = 1;
-            }
-            direction = 1;
-            *RLEDs = 2;
-        }
-        if (byte3 == A_PRESS) { // A pressed, go left
-            if (player_pos[0] >= 7) {
-                boundary[player_pos[0]][player_pos[1]] = 0;
-                player_pos[0] = player_pos[0] - dx;
-                boundary[player_pos[0]][player_pos[1]] = 1;
-            }
-            direction = 2;
-            *RLEDs = 4;
-        }
-        if (byte3 == D_PRESS) { // D pressed, go right
-            if (player_pos[0] < X_BOUND-7) {
-                boundary[player_pos[0]][player_pos[1]] = 0;
-                player_pos[0] = player_pos[0] + dx;
-                boundary[player_pos[0]][player_pos[1]] = 1;
-            }
-            direction = 3;
-            *RLEDs = 8;
-        }
+        player_movement(byte1, byte2, byte3, &player1);
+        shoot_projectile(byte3, &proj1, player1);
 
         wait_for_vsync(); // swap front and back buffers on VGA vertical sync
         pixel_buffer_start = *(pixel_ctrl_ptr + 1); // new back buffer
@@ -256,6 +231,142 @@ int main(void) {
 		}*/
 	}
     
+}
+
+void save_twoframes(int *prev_pos_x, int *prev_pox_y, int *prev2_pos_x, int *prev2_pos_y, int x_pos, int y_pos) {
+    *prev2_pos_x = *prev_pos_x;
+    *prev2_pos_y = *prev_pox_y;
+    *prev_pos_x = x_pos;
+    *prev_pox_y = y_pos;
+}
+
+void draw_projectile(int x, int y) {
+    plot_pixel(x,y,0xF176D7);
+}
+
+void shoot_projectile(int byte3, struct projectile *p, struct player play) {
+    // when I is pressed, intialize the starting position of the projectile and set it to active 
+    if (byte3 == I_PRESS && !p->isActive) {
+        boundary[p->x][p->y] = EMPTY_CODE;
+        p->x = play.x;
+        p->y = play.y;
+        p->direction = play.direction;
+        p->isActive = true;
+        boundary[p->x][p->y] = PROJECTILE_CODE;
+    }
+
+    // update position of an active projectile
+    switch (p->direction)
+    {
+    case 0:
+        if (p->y > 4) p->y = p->y - dy_projectile;
+        else p->isActive = false;
+        break;
+    case 1:
+        if (p->y < Y_BOUND-4) p->y = p->y + dy_projectile;
+        else p->isActive = false;
+        break;
+    case 2:
+        if (p->x > 4) p->x = p->x - dx_projectile;
+        else p->isActive = false;
+        break;
+    case 3:
+        if (p->x < X_BOUND-4) p->x = p->x + dx_projectile;
+        else p->isActive = false;
+        break;
+    default:
+        break;
+    }
+}
+
+void player_movement(int byte1, int byte2, int byte3, struct player *p) {
+    if (byte2 == 0xF0) { // W and D pressed, go diagonally up and right
+       return;
+    }
+
+    /*// diagonal movement
+    if ((byte2 == D_PRESS && byte3 == W_PRESS) || (byte2 == W_PRESS && byte3 == D_PRESS)) { // W and D pressed, go diagonally up and right
+        if (player_pos[0] < X_BOUND-7 && player_pos[1] >= 7) {
+            boundary[player_pos[0]][player_pos[1]] = 0;
+            player_pos[0] = player_pos[0] + dx;
+            player_pos[1] = player_pos[1] - dy;
+            boundary[player_pos[0]][player_pos[1]] = 1;
+        }
+        player_direction = 0;
+        *RLEDs = 1;
+    }
+
+    else if ((byte2 == A_PRESS && byte3 == W_PRESS) || (byte2 == W_PRESS && byte3 == A_PRESS)) { // W and A pressed, go diagonally up and left
+        if (player_pos[0] >= 7 && player_pos[1] >= 7) {
+            boundary[player_pos[0]][player_pos[1]] = 0;
+            player_pos[0] = player_pos[0] - dx;
+            player_pos[1] = player_pos[1] - dy;
+            boundary[player_pos[0]][player_pos[1]] = 1;
+        }
+        player_direction = 0;
+        *RLEDs = 1;
+    }
+
+    else if ((byte3 == S_PRESS && byte2 == A_PRESS) || (byte2 == S_PRESS && byte3 == A_PRESS)) { // S and A pressed, go down and left
+        if (player_pos[0] >=7 && player_pos[1] < Y_BOUND-7) {
+            boundary[player_pos[0]][player_pos[1]] = 0;
+            player_pos[1] = player_pos[1] + dx;
+            player_pos[0] = player_pos[0] - dy;
+            boundary[player_pos[0]][player_pos[1]] = 1;
+        }
+        player_direction = 1;
+        *RLEDs = 2;
+    }
+
+    else if ((byte3 == S_PRESS && byte2 == D_PRESS) || (byte2 == S_PRESS && byte3 == D_PRESS)) { // S and D pressed, go down and right
+        if (player_pos[1] < Y_BOUND-7 && player_pos[0] < X_BOUND-7) {
+            boundary[player_pos[0]][player_pos[1]] = 0;
+            player_pos[1] = player_pos[1] + dx;
+            player_pos[0] = player_pos[0] + dy;
+            boundary[player_pos[0]][player_pos[1]] = 1;
+        }
+        player_direction = 1;
+        *RLEDs = 2;
+    }*/
+
+    // standard movement
+    if (byte3 == W_PRESS) { // W pressed, go up
+        if (p->y >= 7) {
+            boundary[p->x][p->y] = EMPTY_CODE;
+            p->y = p->y - dy;
+            boundary[p->x][p->y] = PLAYER_CODE;
+        } 
+        p->direction = 0;
+        *RLEDs = 1;
+    }
+    else if (byte3 == S_PRESS) { // S pressed, go down
+        if (p->y < Y_BOUND-7) {
+            boundary[p->x][p->y] = EMPTY_CODE;
+            p->y = p->y + dy;
+            boundary[p->x][p->y] = PLAYER_CODE;
+        }
+        p->direction = 1;
+        *RLEDs = 2;
+    }
+    else if (byte3 == A_PRESS) { // A pressed, go left
+        if (p->x >= 7) {
+            boundary[p->x][p->y] = EMPTY_CODE;
+            p->x = p->x - dx;
+            boundary[p->x][p->y] = PLAYER_CODE;
+        }
+        p->direction = 2;
+        *RLEDs = 4;
+    }
+    else if (byte3 == D_PRESS) { // D pressed, go right
+        if (p->x < X_BOUND-7) {
+            boundary[p->x][p->y] = EMPTY_CODE;
+            p->x = p->x + dx;
+            boundary[p->x][p->y] = PLAYER_CODE;
+        }
+        p->direction = 3;
+        *RLEDs = 8;
+    }
+
 }
 
 void draw_player(int x, int y, int direction) {
