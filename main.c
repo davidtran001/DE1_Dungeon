@@ -1,3 +1,8 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include <time.h>
+
 /* This files provides address values that exist in the system */
 
 #define BOARD                 "DE1-SoC"
@@ -64,10 +69,6 @@
 // debugging
 #define RLEDs ((volatile long *) 0xFF200000)
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdbool.h>
-
 // constants
 // Screen size 
 #define RESOLUTION_X 320
@@ -92,6 +93,18 @@
 #define ZOMBIE_CODE 3
 #define BARRELL_CODE 4
 
+// direction codes
+#define UP_CODE 0
+#define DOWN_CODE 1
+#define LEFT_CODE 2
+#define RIGHT_CODE 3
+
+// zombie constants
+#define MAX_ZOMBIES 5
+
+// projectile
+#define BASE_PROJECTILE_SPEED 8
+
 // structs
 struct player {
     int x;
@@ -113,9 +126,11 @@ struct projectile {
     int prev2_y;
     int direction;
     bool isActive;
+    int speed;
 };
 
 struct zombie {
+    int id;
     int x;
     int y;
     int prev_x;
@@ -124,6 +139,7 @@ struct zombie {
     int prev2_y;
     int direction;
     int health;
+    bool isAlive;
 };
 
 struct barrell {
@@ -135,20 +151,24 @@ struct barrell {
 // global variables
 volatile int pixel_buffer_start; // global variable
 int player_color = 0xD376D7;
+int zombie_color = 0x00F000;
 int dx = 2;
 int dy = 2;
-int dx_projectile = 8;
-int dy_projectile = 8;
+int d_projectile = 8;
 int boundary[X_BOUND][Y_BOUND];
+struct zombie zombies[MAX_ZOMBIES];
+int num_zombies = 0;
 
 // global structs
 struct player player1 = {X_BOUND/2, Y_BOUND/2, X_BOUND/2, Y_BOUND/2, X_BOUND/2, Y_BOUND/2, 0, 100};
-struct projectile proj1 = {0,0,0,0,0,0,0,false};
+struct projectile proj1 = {0,0,0,0,0,0,0,false,BASE_PROJECTILE_SPEED};
 
 // function prototypes
+struct zombie spawn_zombie();
+void draw_zombie(int x, int y, int direction);
 void save_twoframes(int *prev_pos_x, int *prev_pox_y, int *prev2_pos_x, int *prev2_pos_y, int x_pos, int y_pos);
 void draw_projectile(int x, int y);
-void shoot_projectile(int byte3, struct projectile *p, struct player play);
+void shoot_projectile(int byte1, int byte2, int byte3, struct projectile *p, struct player play);
 void player_movement(int byte1, int byte2, int byte3, struct player *p);
 void draw_player(int x, int y, int direction);
 void wait_for_vsync();
@@ -159,15 +179,25 @@ void plot_pixel(int x, int y, short int line_color);
 void draw_box(int x, int y, short int color);
 
 int main(void) {
+    srand(time(NULL));
+
     // game setup
-    // boundary
+    /* intialize boundary
+    boundary will keep track of the positions of the player, zombies and other coordinate based objects in the boundary 
+    NOTE: zombies will have an id of 10 <= zombie_id < 15 */
     int i, j;
     for (i = 0; i < X_BOUND; i++) {
         for (j = 0; j < Y_BOUND; j++) {
             boundary[i][j] = EMPTY_CODE;
         }
     }
-    boundary[player1.x][player1.y] = 1;
+    boundary[player1.x][player1.y] = PLAYER_CODE;
+
+    // initialize zombies
+    for (i = 0; i < MAX_ZOMBIES; i++) {
+        struct zombie z = spawn_zombie(i);
+        zombies[i] = z;
+    }
 
     // setup PS/2 port
     unsigned char byte1 = 0;
@@ -194,17 +224,26 @@ int main(void) {
     clear_screen(); // pixel_buffer_start points to the pixel buffer
 
     draw_player(player1.x, player1.y, player1.direction);
-
     // main loop
     while (1) {
-
         // discard old drawings
         draw_box(player1.prev2_x, player1.prev2_y, 0x0);
         draw_player(player1.x, player1.y, player1.direction);
+
+        //printf("zombie position is (%d, %d) \n", z.x, z.y);
+        //draw_box(z.prev2_x, z.prev2_y, 0x0);
+        //draw_zombie(z.x, z.y, z.direction);
+
+        for (i = 0; i < MAX_ZOMBIES; i++) {
+            if (zombies[i].isAlive) {
+                draw_zombie(zombies[i].x, zombies[i].y, zombies[i].direction);
+                //printf("drawing zombie %d\n", i);
+            }
+        }
+
         plot_pixel(proj1.prev2_x, proj1.prev2_y, 0x0);
         draw_projectile(proj1.x, proj1.y);
         
-        // save the position of a "object" two frames ago
         save_twoframes(&player1.prev_x, &player1.prev_y, &player1.prev2_x, &player1.prev2_y, player1.x, player1.y);
         save_twoframes(&proj1.prev_x, &proj1.prev_y, &proj1.prev2_x, &proj1.prev2_y, proj1.x, proj1.y);
 
@@ -216,23 +255,42 @@ int main(void) {
 			byte1 = byte2;
 			byte2 = byte3;
 			byte3 = PS2_data & 0xFF;
-            printf("byte1 is %d, byte2 is %d, byte3 is %d \n", byte1, byte2, byte3);
+            //printf("byte1 is %d, byte2 is %d, byte3 is %d \n", byte1, byte2, byte3);
 		}
         player_movement(byte1, byte2, byte3, &player1);
-        shoot_projectile(byte3, &proj1, player1);
+        shoot_projectile(byte1, byte2, byte3, &proj1, player1);
 
         wait_for_vsync(); // swap front and back buffers on VGA vertical sync
         pixel_buffer_start = *(pixel_ctrl_ptr + 1); // new back buffer
-
-
-		/*if ((byte2 == 0xAA) && (byte3 == 0x00)) {
-			// mouse inserted; initialize sending of data
-			*(PS2_ptr) = 0xF4;
-		}*/
 	}
     
 }
 
+// make new zombie struct
+struct zombie spawn_zombie(int zombie_id) {
+    int x_spawn = rand() % (X_BOUND-7);
+    int y_spawn = rand() % (Y_BOUND-7);
+    struct zombie z = {10+zombie_id, x_spawn, y_spawn, 0, 0, 0, 0, 0, 1, true};
+    boundary[x_spawn][y_spawn] = 10+zombie_id;
+    return z;
+}
+
+void draw_zombie(int x, int y, int direction) {
+    if (direction == UP_CODE) {
+        draw_box(x, y, zombie_color);
+    }
+    if (direction == DOWN_CODE) {
+        draw_box(x, y, zombie_color);
+    }
+    if (direction == LEFT_CODE) { 
+        draw_box(x, y, zombie_color);
+    }
+    if (direction == RIGHT_CODE) { 
+        draw_box(x, y, zombie_color);
+    }
+}
+
+// save the position of a "object" two frames ago
 void save_twoframes(int *prev_pos_x, int *prev_pox_y, int *prev2_pos_x, int *prev2_pos_y, int x_pos, int y_pos) {
     *prev2_pos_x = *prev_pos_x;
     *prev2_pos_y = *prev_pox_y;
@@ -241,12 +299,14 @@ void save_twoframes(int *prev_pos_x, int *prev_pox_y, int *prev2_pos_x, int *pre
 }
 
 void draw_projectile(int x, int y) {
-    plot_pixel(x,y,0xF176D7);
+    plot_pixel(x,y, 0xF176D7);
 }
 
-void shoot_projectile(int byte3, struct projectile *p, struct player play) {
+void shoot_projectile(int byte1, int byte2, int byte3, struct projectile *p, struct player play) {
+    if (byte1 == byte3 && byte2 == 0xF0);
+
     // when I is pressed, intialize the starting position of the projectile and set it to active 
-    if (byte3 == I_PRESS && !p->isActive) {
+    else if (byte3 == I_PRESS && !p->isActive) {
         boundary[p->x][p->y] = EMPTY_CODE;
         p->x = play.x;
         p->y = play.y;
@@ -258,25 +318,36 @@ void shoot_projectile(int byte3, struct projectile *p, struct player play) {
     // update position of an active projectile
     switch (p->direction)
     {
-    case 0:
-        if (p->y > 4) p->y = p->y - dy_projectile;
+    case UP_CODE:
+        if (p->y > 9) p->y = p->y - 1;
         else p->isActive = false;
         break;
-    case 1:
-        if (p->y < Y_BOUND-4) p->y = p->y + dy_projectile;
+    case DOWN_CODE:
+        if (p->y < Y_BOUND-9) p->y = p->y + 1;
         else p->isActive = false;
         break;
-    case 2:
-        if (p->x > 4) p->x = p->x - dx_projectile;
+    case LEFT_CODE:
+        if (p->x > 9) p->x = p->x - 1;
         else p->isActive = false;
         break;
-    case 3:
-        if (p->x < X_BOUND-4) p->x = p->x + dx_projectile;
+    case RIGHT_CODE:
+        if (p->x < X_BOUND-9) p->x = p->x + 1;
         else p->isActive = false;
         break;
     default:
         break;
     }
+    // if boundary[x][y] is a int >= 10 then a zombie is in that position
+    if (boundary[p->x][p->y] >= 10 && boundary[p->x][p->y] < 15) {
+        int zombie_id = 10-boundary[p->x][p->y];
+        printf("HIT ZOMBIE %d", zombie_id);
+        zombies[zombie_id].health -= 1; // projectile hits zombie and the zombie's health will decrease
+        if (zombies[zombie_id].health <= 0) { // if the zombie has <= 0 health then it is dead
+            zombies[zombie_id].isAlive = false;
+            boundary[p->x][p->y] = EMPTY_CODE;
+        }
+    }
+    else boundary[p->x][p->y] = PROJECTILE_CODE;
 }
 
 void player_movement(int byte1, int byte2, int byte3, struct player *p) {
@@ -371,16 +442,16 @@ void player_movement(int byte1, int byte2, int byte3, struct player *p) {
 
 void draw_player(int x, int y, int direction) {
 
-    if (direction == 0) { // player looking up
+    if (direction == UP_CODE) { // player looking up
         draw_box(x, y, player_color);
     }
-    if (direction == 1) { // player looking down
+    if (direction == DOWN_CODE) { // player looking down
         draw_box(x, y, player_color);
     }
-    if (direction == 2) { // player looking left
+    if (direction == LEFT_CODE) { // player looking left
         draw_box(x, y, player_color);
     }
-    if (direction == 3) { // player looking right
+    if (direction == RIGHT_CODE) { // player looking right
         draw_box(x, y, player_color);
     }
     plot_pixel(x,y,0x0);
