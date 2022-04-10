@@ -199,6 +199,14 @@ int main(void) {
         zombies[i] = z;
     }
 
+    // print boundary
+    /*for (i = 0; i < X_BOUND; i++) {
+        for (j = 0; j < Y_BOUND; j++) {
+            printf("%d", boundary[i][j]);
+        }
+        printf("\n");
+    }*/
+
     // setup PS/2 port
     unsigned char byte1 = 0;
     unsigned char byte2 = 0;
@@ -233,6 +241,10 @@ int main(void) {
         //printf("zombie position is (%d, %d) \n", z.x, z.y);
         //draw_box(z.prev2_x, z.prev2_y, 0x0);
         //draw_zombie(z.x, z.y, z.direction);
+
+        for (i = 0; i < MAX_ZOMBIES; i++) {
+                if (!zombies[i].isAlive) draw_box(zombies[i].x, zombies[i].y, 0x0);
+        }
 
         for (i = 0; i < MAX_ZOMBIES; i++) {
             if (zombies[i].isAlive) {
