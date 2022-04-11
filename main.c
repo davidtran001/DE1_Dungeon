@@ -251,6 +251,20 @@ int main(void) {
         //draw_box(z.prev2_x, z.prev2_y, 0x0);
         //draw_zombie(z.x, z.y, z.direction);
 
+        if (num_zombies <= 5) {
+            zombie_buffer += 1;
+            if (zombie_buffer >= 8000) {
+                for (i = 0; i < MAX_ZOMBIES; i++) {
+                    if (!zombies[i].isAlive) {
+                        struct zombie z = spawn_zombie(i);
+                        zombies[i] = z;
+                        zombie_buffer = 0;
+                        break;
+                    }
+                }
+            }
+        }
+
         for (i = 0; i < MAX_ZOMBIES; i++) {
                 if (!zombies[i].isAlive) draw_box(zombies[i].x, zombies[i].y, 0x0);
         }
@@ -301,15 +315,17 @@ struct zombie spawn_zombie(int zombie_id) {
     int x_spawn = rand() % (X_BOUND-7 + 1 - 7) + 7;
     int y_spawn = rand() % (Y_BOUND-7 + 1 - 7) + 7;
     struct zombie z = {10+zombie_id, x_spawn, y_spawn, 0, 0, 0, 0, 0, 1, true};
+    num_zombies += 1;
     int i, j;
-    for (i = 0; i <= 6; i++) {
+    boundary[x_spawn][y_spawn] = 10+zombie_id;
+    /*for (i = 0; i <= 6; i++) {
         for (j = 0; j <= 6; j++) {
             boundary[x_spawn-i][y_spawn-j] = 10+zombie_id;
             boundary[x_spawn-i][y_spawn+j] = 10+zombie_id;
             boundary[x_spawn+i][y_spawn-j] = 10+zombie_id;
             boundary[x_spawn+i][y_spawn+j] = 10+zombie_id;
         }
-    }
+    }*/
     return z;
 }
 
