@@ -101,8 +101,7 @@
 #define RIGHT_CODE 3
 
 // zombie constants
-//#define MAX_ZOMBIES 5
-#define MAX_ZOMBIES 1
+#define MAX_ZOMBIES 5
 #define MAX_BARRELLS 3
 // projectile
 #define BASE_PROJECTILE_SPEED 8
