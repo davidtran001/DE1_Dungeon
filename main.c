@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <time.h>
+#include <math.h>
 
 /* This files provides address values that exist in the system */
 
@@ -100,7 +101,8 @@
 #define RIGHT_CODE 3
 
 // zombie constants
-#define MAX_ZOMBIES 5
+//#define MAX_ZOMBIES 5
+#define MAX_ZOMBIES 1
 #define MAX_BARRELLS 3
 // projectile
 #define BASE_PROJECTILE_SPEED 8
@@ -174,6 +176,7 @@ int boundary[X_BOUND][Y_BOUND];
 struct zombie zombies[MAX_ZOMBIES];
 int num_zombies = 0;
 int zombie_buffer = 0;
+bool update_zombie = true;
 struct barrell barrells[MAX_BARRELLS];
 int num_barrells = 0;
 int barrell_buffer = 0;
@@ -263,15 +266,6 @@ int main(void) {
     draw_player(player1.x, player1.y, player1.direction);
     // main loop
     while (1) {
-        printf("num zombies = %d\n", num_zombies);
-        // discard old drawings
-        draw_box(player1.prev2_x, player1.prev2_y, 0x0);
-        draw_player(player1.x, player1.y, player1.direction);
-        //draw_healthBar(healthBar.value,);
-        //printf("zombie position is (%d, %d) \n", z.x, z.y);
-        //draw_box(z.prev2_x, z.prev2_y, 0x0);
-        //draw_zombie(z.x, z.y, z.direction);
-
         // respawn zombies
         if (num_zombies < MAX_ZOMBIES) {
             zombie_buffer += 1;
@@ -303,14 +297,18 @@ int main(void) {
         }
 
         for (i = 0; i < MAX_ZOMBIES; i++) {
-                if (!zombies[i].isAlive) draw_box(zombies[i].x, zombies[i].y, 0x0);
-        }
-
-        for (i = 0; i < MAX_ZOMBIES; i++) {
+            if (update_zombie) {
+                zombie_movement(i);
+                update_zombie = false;
+            } else update_zombie = true;
+            
             if (zombies[i].isAlive) {
+                draw_box(zombies[i].prev2_x, zombies[i].prev2_y, 0x0);
                 draw_zombie(zombies[i].x, zombies[i].y, zombies[i].direction);
                 //printf("drawing zombie %d\n", i);
             }
+            else if (!zombies[i].isAlive) draw_box(zombies[i].x, zombies[i].y, 0x0);
+            save_twoframes(&zombies[i].prev_x, &zombies[i].prev_y, &zombies[i].prev2_x, &zombies[i].prev2_y, zombies[i].x, zombies[i].y);
         }
 		for (i = 0; i < MAX_BARRELLS; i++) {
                 if (!barrells[i].isActive) draw_box(barrells[i].x, barrells[i].y, 0x0);
@@ -320,6 +318,9 @@ int main(void) {
                 draw_barrell(barrells[i].x, barrells[i].y);
             }
         }
+
+        draw_box(player1.prev2_x, player1.prev2_y, 0x0);
+        draw_player(player1.x, player1.y, player1.direction);
 
         calculate_healthBar(&healthBar,&player1);
         plot_pixel(proj1.prev2_x, proj1.prev2_y, 0x0);
@@ -349,6 +350,13 @@ int main(void) {
 }
 
 void zombie_movement(int zombie_id) {
+    if (zombies[zombie_id].isAlive) {
+        int dir_x = player1.x - zombies[zombie_id].x;
+        int dir_y = player1.y - zombies[zombie_id].y;
+        int angle = atan2(dir_x, dir_y) * 180/M_PI;
+        zombies[zombie_id].x = zombies[zombie_id].x + (dir_x/abs(dir_x));
+        zombies[zombie_id].y = zombies[zombie_id].y + (dir_y/abs(dir_y));
+    } else return;
 
 }
 
@@ -376,7 +384,7 @@ struct barrell spawn_barrell(int barrell_id) {
 struct zombie spawn_zombie(int zombie_id) {
     int x_spawn = rand() % (X_BOUND-7 + 1 - 7) + 7;
     int y_spawn = rand() % (Y_BOUND-7 + 1 - 7) + 7;
-    struct zombie z = {10+zombie_id, x_spawn, y_spawn, 0, 0, 0, 0, 0, 1, true};
+    struct zombie z = {10+zombie_id, x_spawn, y_spawn, x_spawn,  y_spawn, x_spawn, y_spawn, 0, 1, true};
     num_zombies += 1;
     int i, j;
     boundary[x_spawn][y_spawn] = 10+zombie_id;
