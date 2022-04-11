@@ -155,8 +155,7 @@ struct health{
     int prev_y;
     int prev2_x;
     int prev2_y;
-    int value;
-    short int color;
+   
     
 }
 
@@ -166,6 +165,7 @@ int player_color = 0xD376D7;
 int zombie_color = 0x00F000;
 int barrell_color = 0xFFC1CC;
 int green = 0x66cc00;
+int red = 0xbe1825;
 int dx = 2;
 int dy = 2;
 int d_projectile = 8;
@@ -177,7 +177,7 @@ struct barrell barrells[MAX_BARRELLS];
 // global structs
 struct player player1 = {X_BOUND/2, Y_BOUND/2, X_BOUND/2, Y_BOUND/2, X_BOUND/2, Y_BOUND/2, 0, 100, true};
 struct projectile proj1 = {0,0,0,0,0,0,0,false,BASE_PROJECTILE_SPEED};
-struct health healthBar= {X_BOUND/2, Y_BOUND/2, X_BOUND/2, Y_BOUND/2, X_BOUND/2, Y_BOUND/2,100};
+struct health healthBar= {X_BOUND/2, Y_BOUND/2, X_BOUND/2, Y_BOUND/2, X_BOUND/2, Y_BOUND/2};
 // function prototypes
 struct zombie spawn_zombie();
 void draw_zombie(int x, int y, int direction);
@@ -193,6 +193,8 @@ void swap(int *xp, int *yp);
 void draw_line(int x0, int y0, int x1, int y1, short int color);
 void plot_pixel(int x, int y, short int line_color);
 void draw_box(int x, int y, short int color);
+void draw_healthBar(int x, int y, short int color);
+void calculate_healthBar(struct health *h, struct player *p );
 
 int main(void) {
     srand(time(NULL));
@@ -257,7 +259,7 @@ int main(void) {
         // discard old drawings
         draw_box(player1.prev2_x, player1.prev2_y, 0x0);
         draw_player(player1.x, player1.y, player1.direction);
-        draw_healthBar(healthBar.value,);
+     
         //printf("zombie position is (%d, %d) \n", z.x, z.y);
         //draw_box(z.prev2_x, z.prev2_y, 0x0);
         //draw_zombie(z.x, z.y, z.direction);
@@ -294,14 +296,15 @@ int main(void) {
                 draw_barrell(barrells[i].x, barrells[i].y);
             }
         }
-
+        calculate_healthBar(&healthBar,&player1);
         plot_pixel(proj1.prev2_x, proj1.prev2_y, 0x0);
 		if(proj1.isActive)
            draw_projectile(proj1.x, proj1.y);
         
         save_twoframes(&player1.prev_x, &player1.prev_y, &player1.prev2_x, &player1.prev2_y, player1.x, player1.y);
         save_twoframes(&proj1.prev_x, &proj1.prev_y, &proj1.prev2_x, &proj1.prev2_y, proj1.x, proj1.y);
-
+        save_twoframes(&healthBar.prev_x, &healthBar.prev_y, &healthBar.prev2_x, &healthBar.prev2_y, healthBar.x, healthBar.y);
+    
         // PS/2 keyboard input
         PS2_data = *(PS2_ptr);	// read the Data register in the PS/2 port
 		RVALID = (PS2_data & 0x8000);	// extract the RVALID field
@@ -371,42 +374,35 @@ void draw_barrell(int x, int y){
 	draw_box (x,y,barrell_color);
 }
 void draw_healthBar(int x, int y, short int color){
-    int i, j;      
-             if(p->health == 100){
-             
+    int i, j;                
              for (i = 0; i < 50; i++) {
                  for (j = 0; j <= 6; j++) {
-                     plot_pixel(x-i, y-j, green);
-                     plot_pixel(x-i, y+j, green);
-                     plot_pixel(x+i, y-j, green);
-                     plot_pixel(x+i, y+j, green);
+                     plot_pixel(x-i, y-j, color);
+                     plot_pixel(x-i, y+j, color);
+                     plot_pixel(x+i, y-j, color);
+                     plot_pixel(x+i, y+j, color);
                  }
              }
 }
 void calculate_healthBar(struct health *h, struct player *p ){
     if((h->x- 50>= 0) && (h->x+ 50<= X_BOUND) && (h->y-6 >= 0) && h->y+6 <= Y_BOUND){
-        int i, j;
+     
         if(p->health ==100){
-             for (i = 0; i < 50; i++) {
-                 for (j = 0; j <= 6; j++) {
-                     plot_pixel(x-i, y-j, green);
-                     plot_pixel(x-i, y+j, green);
-                     plot_pixel(x+i, y-j, green);
-                     plot_pixel(x+i, y+j, green);
-                 }
-             }
+             draw_healthBar(h->x,h->y,green);
         }
     }
     else{ 
         int k;
-        for(k = 99; k >= p->health; k--){
+        draw_healthBar(h->x,h->y,red);
+        for(k = 1; k <= p->health; k++){          
             int i,j;
+            h->x = (p->health)/2;
             for (i = 0; i<2; i++){
                 for (j = 0; j<=6;j++){
-                     plot_pixel(x-i, y-j, green);
-                     plot_pixel(x-i, y+j, green);
-                     plot_pixel(x+i, y-j, green);
-                     plot_pixel(x+i, y+j, green);
+                     plot_pixel(h->x-i, h->y-j, green);
+                     plot_pixel(h->x-i, h->y+j, green);
+                     plot_pixel(h->x+i, h->y-j, green);
+                     plot_pixel(h->x+i, h->y+j, green);
                  }
              }
 
