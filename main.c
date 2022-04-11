@@ -6,76 +6,76 @@
 
 /* This files provides address values that exist in the system */
 
-#define BOARD                 "DE1-SoC"
+#define BOARD "DE1-SoC"
 
 /* Memory */
-#define DDR_BASE              0x00000000
-#define DDR_END               0x3FFFFFFF
-#define A9_ONCHIP_BASE        0xFFFF0000
-#define A9_ONCHIP_END         0xFFFFFFFF
-#define SDRAM_BASE            0xC0000000
-#define SDRAM_END             0xC3FFFFFF
-#define FPGA_ONCHIP_BASE      0xC8000000
-#define FPGA_ONCHIP_END       0xC803FFFF
-#define FPGA_CHAR_BASE        0xC9000000
-#define FPGA_CHAR_END         0xC9001FFF
+#define DDR_BASE 0x00000000
+#define DDR_END 0x3FFFFFFF
+#define A9_ONCHIP_BASE 0xFFFF0000
+#define A9_ONCHIP_END 0xFFFFFFFF
+#define SDRAM_BASE 0xC0000000
+#define SDRAM_END 0xC3FFFFFF
+#define FPGA_ONCHIP_BASE 0xC8000000
+#define FPGA_ONCHIP_END 0xC803FFFF
+#define FPGA_CHAR_BASE 0xC9000000
+#define FPGA_CHAR_END 0xC9001FFF
 
 /* Cyclone V FPGA devices */
-#define LEDR_BASE             0xFF200000
-#define HEX3_HEX0_BASE        0xFF200020
-#define HEX5_HEX4_BASE        0xFF200030
-#define SW_BASE               0xFF200040
-#define KEY_BASE              0xFF200050
-#define JP1_BASE              0xFF200060
-#define JP2_BASE              0xFF200070
-#define PS2_BASE              0xFF200100
-#define PS2_DUAL_BASE         0xFF200108
-#define JTAG_UART_BASE        0xFF201000
-#define JTAG_UART_2_BASE      0xFF201008
-#define IrDA_BASE             0xFF201020
-#define TIMER_BASE            0xFF202000
-#define AV_CONFIG_BASE        0xFF203000
-#define PIXEL_BUF_CTRL_BASE   0xFF203020
-#define CHAR_BUF_CTRL_BASE    0xFF203030
-#define AUDIO_BASE            0xFF203040
-#define VIDEO_IN_BASE         0xFF203060
-#define ADC_BASE              0xFF204000
+#define LEDR_BASE 0xFF200000
+#define HEX3_HEX0_BASE 0xFF200020
+#define HEX5_HEX4_BASE 0xFF200030
+#define SW_BASE 0xFF200040
+#define KEY_BASE 0xFF200050
+#define JP1_BASE 0xFF200060
+#define JP2_BASE 0xFF200070
+#define PS2_BASE 0xFF200100
+#define PS2_DUAL_BASE 0xFF200108
+#define JTAG_UART_BASE 0xFF201000
+#define JTAG_UART_2_BASE 0xFF201008
+#define IrDA_BASE 0xFF201020
+#define TIMER_BASE 0xFF202000
+#define AV_CONFIG_BASE 0xFF203000
+#define PIXEL_BUF_CTRL_BASE 0xFF203020
+#define CHAR_BUF_CTRL_BASE 0xFF203030
+#define AUDIO_BASE 0xFF203040
+#define VIDEO_IN_BASE 0xFF203060
+#define ADC_BASE 0xFF204000
 
 /* Cyclone V HPS devices */
-#define HPS_GPIO1_BASE        0xFF709000
-#define HPS_TIMER0_BASE       0xFFC08000
-#define HPS_TIMER1_BASE       0xFFC09000
-#define HPS_TIMER2_BASE       0xFFD00000
-#define HPS_TIMER3_BASE       0xFFD01000
-#define FPGA_BRIDGE           0xFFD0501C
+#define HPS_GPIO1_BASE 0xFF709000
+#define HPS_TIMER0_BASE 0xFFC08000
+#define HPS_TIMER1_BASE 0xFFC09000
+#define HPS_TIMER2_BASE 0xFFD00000
+#define HPS_TIMER3_BASE 0xFFD01000
+#define FPGA_BRIDGE 0xFFD0501C
 
 /* ARM A9 MPCORE devices */
-#define   PERIPH_BASE         0xFFFEC000    // base address of peripheral devices
-#define   MPCORE_PRIV_TIMER   0xFFFEC600    // PERIPH_BASE + 0x0600
+#define PERIPH_BASE 0xFFFEC000       // base address of peripheral devices
+#define MPCORE_PRIV_TIMER 0xFFFEC600 // PERIPH_BASE + 0x0600
 
 /* Interrupt controller (GIC) CPU interface(s) */
-#define MPCORE_GIC_CPUIF      0xFFFEC100    // PERIPH_BASE + 0x100
-#define ICCICR                0x00          // offset to CPU interface control reg
-#define ICCPMR                0x04          // offset to interrupt priority mask reg
-#define ICCIAR                0x0C          // offset to interrupt acknowledge reg
-#define ICCEOIR               0x10          // offset to end of interrupt reg
+#define MPCORE_GIC_CPUIF 0xFFFEC100 // PERIPH_BASE + 0x100
+#define ICCICR 0x00                 // offset to CPU interface control reg
+#define ICCPMR 0x04                 // offset to interrupt priority mask reg
+#define ICCIAR 0x0C                 // offset to interrupt acknowledge reg
+#define ICCEOIR 0x10                // offset to end of interrupt reg
 /* Interrupt controller (GIC) distributor interface(s) */
-#define MPCORE_GIC_DIST       0xFFFED000    // PERIPH_BASE + 0x1000
-#define ICDDCR                0x00          // offset to distributor control reg
-#define ICDISER               0x100         // offset to interrupt set-enable regs
-#define ICDICER               0x180         // offset to interrupt clear-enable regs
-#define ICDIPTR               0x800         // offset to interrupt processor targets regs
-#define ICDICFR               0xC00         // offset to interrupt configuration regs
+#define MPCORE_GIC_DIST 0xFFFED000 // PERIPH_BASE + 0x1000
+#define ICDDCR 0x00                // offset to distributor control reg
+#define ICDISER 0x100              // offset to interrupt set-enable regs
+#define ICDICER 0x180              // offset to interrupt clear-enable regs
+#define ICDIPTR 0x800              // offset to interrupt processor targets regs
+#define ICDICFR 0xC00              // offset to interrupt configuration regs
 
 // debugging
-#define RLEDs ((volatile long *) 0xFF200000)
+#define RLEDs ((volatile long *)0xFF200000)
 
 // constants
-// Screen size 
+// Screen size
 #define RESOLUTION_X 320
 #define RESOLUTION_Y 240
 
-// player boundaries 
+// player boundaries
 #define X_BOUND 320 // 320 - 9 - 9 so model does not go out of bounds
 #define Y_BOUND 240 // 240 - 9 - 9 so model does not go out of bounds
 
@@ -101,13 +101,14 @@
 #define RIGHT_CODE 3
 
 // zombie constants
-#define MAX_ZOMBIES 5
+#define MAX_ZOMBIES 1
 #define MAX_BARRELLS 3
 // projectile
 #define BASE_PROJECTILE_SPEED 8
 
 // structs
-struct player {
+struct player
+{
     int x;
     int y;
     int prev_x;
@@ -116,10 +117,11 @@ struct player {
     int prev2_y;
     int direction;
     int health;
-	int isAlive;
+    int isAlive;
 };
 
-struct projectile {
+struct projectile
+{
     int x;
     int y;
     int prev_x;
@@ -131,7 +133,8 @@ struct projectile {
     int speed;
 };
 
-struct zombie {
+struct zombie
+{
     int id;
     int x;
     int y;
@@ -142,26 +145,28 @@ struct zombie {
     int direction;
     int health;
     bool isAlive;
+    bool new;
 };
 
-struct barrell {
+struct barrell
+{
     int id;
     int x;
     int y;
-	bool isActive;
+    bool isActive;
 };
 
-struct health{
+struct health
+{
     int x;
     int y;
     int prev_x;
     int prev_y;
     int prev2_x;
-    int prev2_y;  
+    int prev2_y;
 };
 
 // global variables
-
 volatile int pixel_buffer_start; // global variable
 int player_color = 0xD376D7;
 int zombie_color = 0x00F000;
@@ -180,17 +185,37 @@ struct barrell barrells[MAX_BARRELLS];
 int num_barrells = 0;
 int barrell_buffer = 0;
 
+// global models
+const uint16_t player_down[15][15] = {
+    {0, 0, 0, 0, 58604, 58604, 58604, 58604, 58604, 58604, 58604, 0, 0, 0, 0},
+    {0, 0, 0, 58636, 58637, 58604, 58604, 58604, 58604, 58604, 58637, 58605, 0, 0, 0},
+    {0, 0, 58604, 58702, 58930, 58702, 58702, 58702, 58702, 58702, 58930, 58702, 58604, 0, 0},
+    {0, 56524, 58604, 58604, 58734, 59027, 59027, 59027, 59027, 58995, 58735, 58604, 58604, 56524, 0},
+    {0, 50124, 56492, 58604, 58604, 58604, 58604, 58604, 58604, 58604, 58604, 58604, 56492, 50124, 0},
+    {0, 48076, 50156, 56492, 58669, 59092, 59092, 59092, 59092, 59092, 58669, 56492, 50156, 48076, 0},
+    {0, 52300, 48076, 52236, 54541, 59092, 1, 59092, 1, 59092, 54541, 52236, 48076, 54348, 0},
+    {58604, 58604, 54380, 54412, 54509, 59092, 59092, 51629, 59092, 59092, 54509, 54412, 54380, 58604, 58604},
+    {54380, 58604, 58604, 58604, 56525, 50350, 59092, 59092, 59092, 50350, 56525, 58604, 58604, 58604, 52300},
+    {56822, 52300, 52236, 47978, 50091, 45158, 53383, 53383, 53383, 45158, 50059, 50025, 52236, 52300, 56888},
+    {0, 52630, 41415, 39174, 41415, 49254, 61608, 61608, 61608, 49254, 41383, 39142, 41415, 52630, 0},
+    {0, 0, 38981, 38981, 45158, 59560, 61608, 61608, 61608, 59560, 45158, 38981, 38981, 0, 0},
+    {0, 0, 54614, 38981, 41029, 43078, 43078, 43078, 43078, 43078, 41029, 38981, 54582, 0, 0},
+    {0, 0, 0, 59099, 13212, 13212, 13212, 59099, 13212, 13212, 13212, 59099, 0, 0, 0},
+    {0, 0, 0, 0, 15838, 15838, 15838, 0, 15838, 15838, 15838, 0, 0, 0, 0},
+
+};
+
 // global structs
-struct player player1 = {X_BOUND/2, Y_BOUND/2, X_BOUND/2, Y_BOUND/2, X_BOUND/2, Y_BOUND/2, 0, 100, true};
-struct projectile proj1 = {0,0,0,0,0,0,0,false,BASE_PROJECTILE_SPEED};
-struct health healthBar= {X_BOUND/2, Y_BOUND/2, X_BOUND/2, Y_BOUND/2, X_BOUND/2, Y_BOUND/2};
+struct player player1 = {X_BOUND / 2, Y_BOUND / 2, X_BOUND / 2, Y_BOUND / 2, X_BOUND / 2, Y_BOUND / 2, 0, 100, true};
+struct projectile proj1 = {0, 0, 0, 0, 0, 0, 0, false, BASE_PROJECTILE_SPEED};
+struct health healthBar = {X_BOUND / 2, Y_BOUND / 2, X_BOUND / 2, Y_BOUND / 2, X_BOUND / 2, Y_BOUND / 2};
 
 // function prototypes
 void zombie_movement(int zombie_id);
 struct barrell spawn_barrell(int barrell_id);
 struct zombie spawn_zombie();
 void draw_healthBar(int x, int y, short int color);
-void calculate_healthBar(struct health *h, struct player *p );
+void calculate_healthBar(struct health *h, struct player *p);
 void draw_zombie(int x, int y, int direction);
 void save_twoframes(int *prev_pos_x, int *prev_pox_y, int *prev2_pos_x, int *prev2_pos_y, int x_pos, int y_pos);
 void draw_projectile(int x, int y);
@@ -205,31 +230,35 @@ void draw_line(int x0, int y0, int x1, int y1, short int color);
 void plot_pixel(int x, int y, short int line_color);
 void draw_box(int x, int y, short int color);
 
-
-int main(void) {
+int main(void)
+{
     srand(time(NULL));
 
     // game setup
     /* intialize boundary
-    boundary will keep track of the positions of the player, zombies and other coordinate based objects in the boundary 
+    boundary will keep track of the positions of the player, zombies and other coordinate based objects in the boundary
     NOTE: zombies will have an id of 10 <= zombie_id < 15 */
     int i, j;
-    for (i = 0; i < X_BOUND; i++) {
-        for (j = 0; j < Y_BOUND; j++) {
+    for (i = 0; i < X_BOUND; i++)
+    {
+        for (j = 0; j < Y_BOUND; j++)
+        {
             boundary[i][j] = EMPTY_CODE;
         }
     }
     boundary[player1.x][player1.y] = PLAYER_CODE;
     boundary[healthBar.x][healthBar.y] = PLAYER_CODE;
     // initialize zombies
-    for (i = 0; i < MAX_ZOMBIES; i++) {
+    for (i = 0; i < MAX_ZOMBIES; i++)
+    {
         struct zombie z = spawn_zombie(i);
         zombies[i] = z;
     }
-   for (i = 0; i< MAX_BARRELLS; i++) {
-       struct barrell b = spawn_barrell(i);
-       barrells[i] = b;
-   }
+    for (i = 0; i < MAX_BARRELLS; i++)
+    {
+        struct barrell b = spawn_barrell(i);
+        barrells[i] = b;
+    }
     // print boundary
     /*for (i = 0; i < X_BOUND; i++) {
         for (j = 0; j < Y_BOUND; j++) {
@@ -241,16 +270,16 @@ int main(void) {
     // setup PS/2 port
     unsigned char byte1 = 0;
     unsigned char byte2 = 0;
-	unsigned char byte3 = 0;
+    unsigned char byte3 = 0;
 
-    volatile int * PS2_ptr = (int *) PS2_BASE;  // PS/2 port address
-	int PS2_data, RVALID;
+    volatile int *PS2_ptr = (int *)PS2_BASE; // PS/2 port address
+    int PS2_data, RVALID;
 
     // setup graphics
-    volatile int * pixel_ctrl_ptr = (int *)0xFF203020;
+    volatile int *pixel_ctrl_ptr = (int *)0xFF203020;
 
-     /* set front pixel buffer to start of FPGA On-chip memory */
-    *(pixel_ctrl_ptr + 1) = 0xC8000000; // first store the address in the 
+    /* set front pixel buffer to start of FPGA On-chip memory */
+    *(pixel_ctrl_ptr + 1) = 0xC8000000; // first store the address in the
                                         // back buffer
     /* now, swap the front/back buffers, to set the front buffer location */
     wait_for_vsync();
@@ -260,17 +289,22 @@ int main(void) {
     /* set back pixel buffer to start of SDRAM memory */
     *(pixel_ctrl_ptr + 1) = 0xC0000000;
     pixel_buffer_start = *(pixel_ctrl_ptr + 1); // we draw on the back buffer
-    clear_screen(); // pixel_buffer_start points to the pixel buffer
+    clear_screen();                             // pixel_buffer_start points to the pixel buffer
 
     draw_player(player1.x, player1.y, player1.direction);
     // main loop
-    while (1) {
+    while (1)
+    {
         // respawn zombies
-        if (num_zombies < MAX_ZOMBIES) {
+        if (num_zombies < MAX_ZOMBIES)
+        {
             zombie_buffer += 1;
-            if (zombie_buffer >= 200) {
-                for (i = 0; i < MAX_ZOMBIES; i++) {
-                    if (!zombies[i].isAlive) {
+            if (zombie_buffer >= 200)
+            {
+                for (i = 0; i < MAX_ZOMBIES; i++)
+                {
+                    if (!zombies[i].isAlive)
+                    {
                         struct zombie z = spawn_zombie(i);
                         zombies[i] = z;
                         zombie_buffer = 0;
@@ -281,11 +315,15 @@ int main(void) {
         }
 
         // respawn barrells
-        if (num_barrells < MAX_BARRELLS) {
+        if (num_barrells < MAX_BARRELLS)
+        {
             barrell_buffer += 1;
-            if (barrell_buffer >= 400) {
-                for (i = 0; i < MAX_BARRELLS; i++) {
-                    if (!barrells[i].isActive) {
+            if (barrell_buffer >= 400)
+            {
+                for (i = 0; i < MAX_BARRELLS; i++)
+                {
+                    if (!barrells[i].isActive)
+                    {
                         struct barrell b = spawn_barrell(i);
                         barrells[i] = b;
                         barrell_buffer = 0;
@@ -294,79 +332,98 @@ int main(void) {
                 }
             }
         }
+        draw_box(player1.prev2_x, player1.prev2_y, 0x0);
+        for (i = 0; i < MAX_ZOMBIES; i++)
+        {  
+            if (!zombies[i].isAlive) {
+                if (/*zombies[i].new == true*/true) {
+                    draw_box(zombies[i].prev2_x, zombies[i].prev2_y, 0x0);
+                    draw_box(zombies[i].prev_x, zombies[i].prev_y, 0x0);
+                    draw_box(zombies[i].x, zombies[i].y, 0x0);
+                    zombies[i].new = false;
+                }
+            }
 
-        for (i = 0; i < MAX_ZOMBIES; i++) {
-            if (update_zombie) {
-                zombie_movement(i);
-                update_zombie = false;
-            } else update_zombie = true;
-            
-            if (zombies[i].isAlive) {
+            else if (zombies[i].isAlive) {
+                if (update_zombie)
+                {
+                    zombie_movement(i);
+                    update_zombie = false;
+                }
+                else update_zombie = true;
                 draw_box(zombies[i].prev2_x, zombies[i].prev2_y, 0x0);
                 draw_zombie(zombies[i].x, zombies[i].y, zombies[i].direction);
-                //printf("drawing zombie %d\n", i);
             }
-            else if (!zombies[i].isAlive) draw_box(zombies[i].x, zombies[i].y, 0x0);
             save_twoframes(&zombies[i].prev_x, &zombies[i].prev_y, &zombies[i].prev2_x, &zombies[i].prev2_y, zombies[i].x, zombies[i].y);
         }
-		for (i = 0; i < MAX_BARRELLS; i++) {
-                if (!barrells[i].isActive) draw_box(barrells[i].x, barrells[i].y, 0x0);
+        for (i = 0; i < MAX_BARRELLS; i++)
+        {
+            if (!barrells[i].isActive)
+                draw_box(barrells[i].x, barrells[i].y, 0x0);
         }
-		for (i = 0; i < MAX_BARRELLS; i++) {
-            if (barrells[i].isActive) {
+        for (i = 0; i < MAX_BARRELLS; i++)
+        {
+            if (barrells[i].isActive)
+            {
                 draw_barrell(barrells[i].x, barrells[i].y);
             }
         }
 
-        draw_box(player1.prev2_x, player1.prev2_y, 0x0);
         draw_player(player1.x, player1.y, player1.direction);
 
-        calculate_healthBar(&healthBar,&player1);
-        plot_pixel(proj1.prev2_x, proj1.prev2_y, 0x0);
-		if(proj1.isActive) draw_projectile(proj1.x, proj1.y);
-        
+        calculate_healthBar(&healthBar, &player1);
+
+        if (proj1.isActive) {
+            plot_pixel(proj1.prev2_x, proj1.prev2_y, 0x0);
+            draw_projectile(proj1.x, proj1.y);
+        }
+
         save_twoframes(&player1.prev_x, &player1.prev_y, &player1.prev2_x, &player1.prev2_y, player1.x, player1.y);
         save_twoframes(&proj1.prev_x, &proj1.prev_y, &proj1.prev2_x, &proj1.prev2_y, proj1.x, proj1.y);
         save_twoframes(&healthBar.prev_x, &healthBar.prev_y, &healthBar.prev2_x, &healthBar.prev2_y, healthBar.x, healthBar.y);
 
         // PS/2 keyboard input
-        PS2_data = *(PS2_ptr);	// read the Data register in the PS/2 port
-		RVALID = (PS2_data & 0x8000);	// extract the RVALID field
-		if (RVALID != 0) {
-			/* always save the last three bytes received */
-			byte1 = byte2;
-			byte2 = byte3;
-			byte3 = PS2_data & 0xFF;
-            //printf("byte1 is %d, byte2 is %d, byte3 is %d \n", byte1, byte2, byte3);
-		}
+        PS2_data = *(PS2_ptr);        // read the Data register in the PS/2 port
+        RVALID = (PS2_data & 0x8000); // extract the RVALID field
+        if (RVALID != 0)
+        {
+            /* always save the last three bytes received */
+            byte1 = byte2;
+            byte2 = byte3;
+            byte3 = PS2_data & 0xFF;
+            // printf("byte1 is %d, byte2 is %d, byte3 is %d \n", byte1, byte2, byte3);
+        }
         player_movement(byte1, byte2, byte3, &player1);
         shoot_projectile(byte1, byte2, byte3, &proj1, player1);
 
-        wait_for_vsync(); // swap front and back buffers on VGA vertical sync
+        wait_for_vsync();                           // swap front and back buffers on VGA vertical sync
         pixel_buffer_start = *(pixel_ctrl_ptr + 1); // new back buffer
-	}
-    
+    }
 }
 
-void zombie_movement(int zombie_id) {
-    if (zombies[zombie_id].isAlive) {
+void zombie_movement(int zombie_id)
+{
+    if (zombies[zombie_id].isAlive)
+    {
         int dir_x = player1.x - zombies[zombie_id].x;
         int dir_y = player1.y - zombies[zombie_id].y;
-        int angle = atan2(dir_x, dir_y) * 180/M_PI;
-        zombies[zombie_id].x = zombies[zombie_id].x + (dir_x/abs(dir_x));
-        zombies[zombie_id].y = zombies[zombie_id].y + (dir_y/abs(dir_y));
-    } else return;
-
+        int angle = atan2(dir_x, dir_y) * 180 / M_PI;
+        zombies[zombie_id].x = zombies[zombie_id].x + (dir_x / abs(dir_x));
+        zombies[zombie_id].y = zombies[zombie_id].y + (dir_y / abs(dir_y));
+    }
+    else
+        return;
 }
 
 // make new barrell struct
-struct barrell spawn_barrell(int barrell_id) {
-    int x_spawn = rand() % (X_BOUND-7 + 1 - 7) + 7;
-    int y_spawn = rand() % (Y_BOUND-7 + 1 - 7) + 7;
-    struct barrell b = {20+barrell_id, x_spawn, y_spawn, true};
+struct barrell spawn_barrell(int barrell_id)
+{
+    int x_spawn = rand() % (X_BOUND - 7 + 1 - 7) + 7;
+    int y_spawn = rand() % (Y_BOUND - 7 + 1 - 7) + 7;
+    struct barrell b = {20 + barrell_id, x_spawn, y_spawn, true};
     num_barrells += 1;
     int i, j;
-    boundary[x_spawn][y_spawn] = 20+barrell_id;
+    boundary[x_spawn][y_spawn] = 20 + barrell_id;
     /*for (i = 0; i <= 6; i++) {
         for (j = 0; j <= 6; j++) {
             boundary[x_spawn-i][y_spawn-j] = 10+zombie_id;
@@ -378,15 +435,15 @@ struct barrell spawn_barrell(int barrell_id) {
     return b;
 }
 
-
 // make new zombie struct
-struct zombie spawn_zombie(int zombie_id) {
-    int x_spawn = rand() % (X_BOUND-7 + 1 - 7) + 7;
-    int y_spawn = rand() % (Y_BOUND-7 + 1 - 7) + 7;
-    struct zombie z = {10+zombie_id, x_spawn, y_spawn, x_spawn,  y_spawn, x_spawn, y_spawn, 0, 1, true};
+struct zombie spawn_zombie(int zombie_id)
+{
+    int x_spawn = rand() % (X_BOUND - 7 + 1 - 7) + 7;
+    int y_spawn = rand() % (Y_BOUND - 7 + 1 - 7) + 7;
+    struct zombie z = {10 + zombie_id, x_spawn, y_spawn, x_spawn, y_spawn, x_spawn, y_spawn, 0, 1, true, true};
     num_zombies += 1;
     int i, j;
-    boundary[x_spawn][y_spawn] = 10+zombie_id;
+    boundary[x_spawn][y_spawn] = 10 + zombie_id;
     /*for (i = 0; i <= 6; i++) {
         for (j = 0; j <= 6; j++) {
             boundary[x_spawn-i][y_spawn-j] = 10+zombie_id;
@@ -398,83 +455,107 @@ struct zombie spawn_zombie(int zombie_id) {
     return z;
 }
 
-void draw_healthBar(int x, int y, short int color){
-    int i, j;                
-             for (i = 0; i < 50; i++) {
-                 for (j = 0; j <= 6; j++) {
-                     plot_pixel(x-i, y-j, color);
-                     plot_pixel(x-i, y+j, color);
-                     plot_pixel(x+i, y-j, color);
-                     plot_pixel(x+i, y+j, color);
-                 }
-             }
-}
-void calculate_healthBar(struct health *h, struct player *p ){
-    if((h->x- 50>= 0) && (h->x+ 50<= X_BOUND) && (h->y-6 >= 0) && h->y+6 <= Y_BOUND){
-     
-        if(p->health ==100){
-             draw_healthBar(h->x,h->y,green);
+void draw_healthBar(int x, int y, short int color)
+{
+    int i, j;
+    for (i = 0; i < 50; i++)
+    {
+        for (j = 0; j <= 6; j++)
+        {
+            plot_pixel(x - i, y - j, color);
+            plot_pixel(x - i, y + j, color);
+            plot_pixel(x + i, y - j, color);
+            plot_pixel(x + i, y + j, color);
         }
     }
-    else{ 
+}
+void calculate_healthBar(struct health *h, struct player *p)
+{
+    if ((h->x - 50 >= 0) && (h->x + 50 <= X_BOUND) && (h->y - 6 >= 0) && h->y + 6 <= Y_BOUND)
+    {
+
+        if (p->health == 100)
+        {
+            draw_healthBar(h->x, h->y, green);
+        }
+    }
+    else
+    {
         int k;
-        draw_healthBar(h->x,h->y,red);
-        for(k = 1; k <= p->health; k++){          
-            int i,j;
-			if((p->health)%2!=0){
-            h->x = (p->health)/2;
-			}else{
-				p->health = p->health +1; 
-				h->x = (p->health)/2;
-			}
-            for (i = 0; i<2; i++){
-                for (j = 0; j<=6;j++){
-                     plot_pixel(h->x-i, h->y-j, green);
-                     plot_pixel(h->x-i, h->y+j, green);
-                     plot_pixel(h->x+i, h->y-j, green);
-                     plot_pixel(h->x+i, h->y+j, green);
-                 }
-             }
-
+        draw_healthBar(h->x, h->y, red);
+        for (k = 1; k <= p->health; k++)
+        {
+            int i, j;
+            if ((p->health) % 2 != 0)
+            {
+                h->x = (p->health) / 2;
+            }
+            else
+            {
+                p->health = p->health + 1;
+                h->x = (p->health) / 2;
+            }
+            for (i = 0; i < 2; i++)
+            {
+                for (j = 0; j <= 6; j++)
+                {
+                    plot_pixel(h->x - i, h->y - j, green);
+                    plot_pixel(h->x - i, h->y + j, green);
+                    plot_pixel(h->x + i, h->y - j, green);
+                    plot_pixel(h->x + i, h->y + j, green);
+                }
+            }
         }
-    }	
+    }
 }
 
-void draw_zombie(int x, int y, int direction) {
-    if (direction == UP_CODE) {
+void draw_zombie(int x, int y, int direction)
+{
+    if (direction == UP_CODE)
+    {
         draw_box(x, y, zombie_color);
     }
-    if (direction == DOWN_CODE) {
+    if (direction == DOWN_CODE)
+    {
         draw_box(x, y, zombie_color);
     }
-    if (direction == LEFT_CODE) { 
+    if (direction == LEFT_CODE)
+    {
         draw_box(x, y, zombie_color);
     }
-    if (direction == RIGHT_CODE) { 
+    if (direction == RIGHT_CODE)
+    {
         draw_box(x, y, zombie_color);
     }
 }
 
 // save the position of a "object" two frames ago
-void save_twoframes(int *prev_pos_x, int *prev_pox_y, int *prev2_pos_x, int *prev2_pos_y, int x_pos, int y_pos) {
+void save_twoframes(int *prev_pos_x, int *prev_pox_y, int *prev2_pos_x, int *prev2_pos_y, int x_pos, int y_pos)
+{
     *prev2_pos_x = *prev_pos_x;
     *prev2_pos_y = *prev_pox_y;
     *prev_pos_x = x_pos;
     *prev_pox_y = y_pos;
 }
 
-void draw_projectile(int x, int y) {
-    plot_pixel(x,y, 0xF176D7);
+void draw_projectile(int x, int y)
+{
+    plot_pixel(x, y, 0xFFFF);
 }
-void draw_barrell(int x, int y){
-	draw_box (x,y,barrell_color);
+void draw_barrell(int x, int y)
+{
+    draw_box(x, y, barrell_color);
 }
 
-void shoot_projectile(int byte1, int byte2, int byte3, struct projectile *p, struct player play) {
-    if (byte1 == byte3 && byte2 == 0xF0);
+void shoot_projectile(int byte1, int byte2, int byte3, struct projectile *p, struct player play)
+{
+    int i,j,k,z;
+    if (byte1 == byte3 && byte2 == 0xF0)
+        ;
 
-    // when I is pressed, intialize the starting position of the projectile and set it to active 
-    else if (byte3 == I_PRESS && !p->isActive) {
+    // when I is pressed, intialize the starting position of the projectile and set it to active
+    else if (byte3 == I_PRESS && !p->isActive)
+    {
         boundary[p->x][p->y] = EMPTY_CODE;
         p->x = play.x;
         p->y = play.y;
@@ -484,73 +565,94 @@ void shoot_projectile(int byte1, int byte2, int byte3, struct projectile *p, str
     }
 
     // update position of an active projectile
-    switch (p->direction)
+    if (p->isActive)
     {
-    case UP_CODE:
-        if (p->y > 9) p->y = p->y - 1;
-        else p->isActive = false;
-        break;
-    case DOWN_CODE:
-        if (p->y < Y_BOUND-9) p->y = p->y + 1;
-        else p->isActive = false;
-        break;
-    case LEFT_CODE:
-        if (p->x > 9) p->x = p->x - 1;
-        else p->isActive = false;
-        break;
-    case RIGHT_CODE:
-        if (p->x < X_BOUND-9) p->x = p->x + 1;
-        else p->isActive = false;
-        break;
-    default:
-        break;
+        switch (p->direction)
+        {
+        case UP_CODE:
+            if (p->y > 9)
+                p->y = p->y - dy;
+            else
+                p->isActive = false;
+            break;
+        case DOWN_CODE:
+            if (p->y < Y_BOUND - 9)
+                p->y = p->y + dy;
+            else
+                p->isActive = false;
+            break;
+        case LEFT_CODE:
+            if (p->x > 9)
+                p->x = p->x - dx;
+            else
+                p->isActive = false;
+            break;
+        case RIGHT_CODE:
+            if (p->x < X_BOUND - 9)
+                p->x = p->x + dx;
+            else
+                p->isActive = false;
+            break;
+        default:
+            break;
+        }
+    
+        // if boundary[x][y] is a int >= 10 then a zombie is in that position
+        for (i = 0; i < MAX_ZOMBIES; i++)
+        {
+            if (((p->x >= zombies[i].x - 2) && (p->x <= zombies[i].x + 2)) && ((p->y >= zombies[i].y - 2) && (p->y <= zombies[i].y + 2)))
+            {
+                // printf("HIT ZOMBIE %d", zombie_id);
+                zombies[i].health -= 1; // projectile hits zombie and the zombie's health will decrease
+                if (zombies[i].isAlive && zombies[i].health <= 0)
+                { // if the zombie has <= 0 health then it is dead
+                    zombies[i].isAlive = false;
+                    num_zombies = num_zombies - 1;
+                }
+                p->isActive = false;
+                boundary[p->x][p->y] = EMPTY_CODE;
+                break;
+            }
+        }
+        for (j = 0; j < MAX_BARRELLS; j++)
+        {
+            if (((p->x >= barrells[j].x - 4) && (p->x <= barrells[j].x + 4)) && ((p->y >= barrells[j].y - 4) && (p->y <= barrells[j].y + 4)))
+            {
+                if (barrells[j].isActive)
+                {
+                    barrells[j].isActive = false;
+                    num_barrells -= 1;
+                }
+                for (k = 0; k < MAX_ZOMBIES; k++)
+                {
+                    if (zombies[k].isAlive && ((barrells[j].x >= zombies[k].x - 260) && (barrells[j].x <= zombies[k].x + 260)) && ((barrells[j].y >= zombies[k].y - 260) && (barrells[j].y <= zombies[k].y + 260)))
+                    {
+                        zombies[k].isAlive = false;
+                        num_zombies = num_zombies - 1;
+                    }
+                    for (z = 100; z > 0; z--)
+                    {
+                        if (((barrells[j].x >= play.x - 260) && (barrells[j].x <= play.x + 260)) && ((barrells[j].y >= play.y - 260) && (barrells[j].y >= play.y + 260)))
+                            play.health -= 1;
+                        if (play.health <= 0)
+                        {
+                            play.isAlive = false;
+                        }
+                    }
+                }
+                p->isActive = false;
+                break;
+            }
+            boundary[p->x][p->y] = EMPTY_CODE;
+        }
     }
-    // if boundary[x][y] is a int >= 10 then a zombie is in that position
-	int i;
-	for (i = 0; i<MAX_ZOMBIES; i++){
-        if (((p->x >=zombies[i].x-2) && (p->x <=zombies[i].x+2)) && ((p->y >= zombies[i].y-2) && (p->y <= zombies[i].y+2))) {
-           //printf("HIT ZOMBIE %d", zombie_id);
-           zombies[i].health -= 1; // projectile hits zombie and the zombie's health will decrease
-           if (zombies[i].isAlive && zombies[i].health <= 0) { // if the zombie has <= 0 health then it is dead
-              zombies[i].isAlive = false;
-              num_zombies = num_zombies-1;								              
-           }
-
-			p->isActive = false;
-			boundary[p->x][p->y] = EMPTY_CODE;
-		}
-    }
-	int j;
-    for (j = 0; j<MAX_BARRELLS; j++) {
-	   if(((p->x >=barrells[j].x-4) && (p->x <= barrells[j].x+4))&& ((p->y >= barrells[j].y-4)&& (p->y <= barrells[j].y+4))){
-	     if (barrells[j].isActive) {
-             barrells[j].isActive = false;
-             num_barrells -= 1; 
-         }
-	     int k;
-		 for(k=0; k< MAX_ZOMBIES; k++){
-			 if(zombies[k].isAlive && ((barrells[j].x >= zombies[k].x-260)&&(barrells[j].x <= zombies[k].x+260))&&((barrells[j].y >= zombies[k].y-260)&&(barrells[j].y <= zombies[k].y+260))){
-			   zombies[k].isAlive = false;
-               num_zombies = num_zombies-1;
-			 }
-			 int z;
-		 for(z = 100; z >0;z --){
-		 if(((barrells[j].x >= play.x-260)&&(barrells[j].x <= play.x+260))&&((barrells[j].y >= play.y-260)&&(barrells[j].y >= play.y+260)))
-		       play.health -= 1;
-			  if (play.health <= 0){
-				  play.isAlive = false;
-			  }
-		 }	    
-	   }
-	   }
-		p->isActive = false;
-	    boundary[p->x][p->y] = EMPTY_CODE;   
-   }
 }
 
-void player_movement(int byte1, int byte2, int byte3, struct player *p) {
-    if (byte2 == 0xF0) { // W and D pressed, go diagonally up and right
-       return;
+void player_movement(int byte1, int byte2, int byte3, struct player *p)
+{
+    if (byte2 == 0xF0)
+    { // W and D pressed, go diagonally up and right
+        return;
     }
 
     /*// diagonal movement
@@ -599,17 +701,21 @@ void player_movement(int byte1, int byte2, int byte3, struct player *p) {
     }*/
 
     // standard movement
-    if (byte3 == W_PRESS) { // W pressed, go up
-        if (p->y >= 7) {
+    if (byte3 == W_PRESS)
+    { // W pressed, go up
+        if (p->y >= 7)
+        {
             boundary[p->x][p->y] = EMPTY_CODE;
             p->y = p->y - dy;
             boundary[p->x][p->y] = PLAYER_CODE;
-        } 
+        }
         p->direction = 0;
         *RLEDs = 1;
     }
-    else if (byte3 == S_PRESS) { // S pressed, go down
-        if (p->y < Y_BOUND-7) {
+    else if (byte3 == S_PRESS)
+    { // S pressed, go down
+        if (p->y < Y_BOUND - 7)
+        {
             boundary[p->x][p->y] = EMPTY_CODE;
             p->y = p->y + dy;
             boundary[p->x][p->y] = PLAYER_CODE;
@@ -617,8 +723,10 @@ void player_movement(int byte1, int byte2, int byte3, struct player *p) {
         p->direction = 1;
         *RLEDs = 2;
     }
-    else if (byte3 == A_PRESS) { // A pressed, go left
-        if (p->x >= 7) {
+    else if (byte3 == A_PRESS)
+    { // A pressed, go left
+        if (p->x >= 7)
+        {
             boundary[p->x][p->y] = EMPTY_CODE;
             p->x = p->x - dx;
             boundary[p->x][p->y] = PLAYER_CODE;
@@ -626,8 +734,10 @@ void player_movement(int byte1, int byte2, int byte3, struct player *p) {
         p->direction = 2;
         *RLEDs = 4;
     }
-    else if (byte3 == D_PRESS) { // D pressed, go right
-        if (p->x < X_BOUND-7) {
+    else if (byte3 == D_PRESS)
+    { // D pressed, go right
+        if (p->x < X_BOUND - 7)
+        {
             boundary[p->x][p->y] = EMPTY_CODE;
             p->x = p->x + dx;
             boundary[p->x][p->y] = PLAYER_CODE;
@@ -635,113 +745,134 @@ void player_movement(int byte1, int byte2, int byte3, struct player *p) {
         p->direction = 3;
         *RLEDs = 8;
     }
-
 }
 
-void draw_player(int x, int y, int direction) {
-
-    if (direction == UP_CODE) { // player looking up
-        draw_box(x, y, player_color);
+void draw_player(int x, int y, int direction)
+{
+    /*
+        if (direction == UP_CODE) { // player looking up
+            draw_box(x, y, player_color);
+        }
+        if (direction == DOWN_CODE) { // player looking down
+            draw_box(x, y, player_color);
+        }
+        if (direction == LEFT_CODE) { // player looking left
+            draw_box(x, y, player_color);
+        }
+        if (direction == RIGHT_CODE) { // player looking right
+            draw_box(x, y, player_color);
+        }
+        plot_pixel(x,y,0x0);*/
+    int i, j;
+    for (i = 0; i < 15; i++)
+    {
+        for (j = 0; j < 15; j++)
+        {
+            if (player_down[i][j] != 0)
+                plot_pixel(player1.x - 7 + j, player1.y - 7 + i, player_down[i][j]);
+        }
     }
-    if (direction == DOWN_CODE) { // player looking down
-        draw_box(x, y, player_color);
-    }
-    if (direction == LEFT_CODE) { // player looking left
-        draw_box(x, y, player_color);
-    }
-    if (direction == RIGHT_CODE) { // player looking right
-        draw_box(x, y, player_color);
-    }
-    plot_pixel(x,y,0x0);
 }
 
-void wait_for_vsync() {
-	volatile int * pixel_ctrl_ptr = (int *)PIXEL_BUF_CTRL_BASE;
-	int status;
-	// set S bit to 1
-	*pixel_ctrl_ptr = 1;
-	// pixel_ctrl_ptr + 3 => 0xFF20302C
-    
-	status = *(pixel_ctrl_ptr + 3);
-	// while (S == 1)
-	while ((status & 0x01) != 0) {
-		status = *(pixel_ctrl_ptr + 3);
-	}
-	return;
+void wait_for_vsync()
+{
+    volatile int *pixel_ctrl_ptr = (int *)PIXEL_BUF_CTRL_BASE;
+    int status;
+    // set S bit to 1
+    *pixel_ctrl_ptr = 1;
+    // pixel_ctrl_ptr + 3 => 0xFF20302C
+
+    status = *(pixel_ctrl_ptr + 3);
+    // while (S == 1)
+    while ((status & 0x01) != 0)
+    {
+        status = *(pixel_ctrl_ptr + 3);
+    }
+    return;
 }
 
-void clear_screen() {
-	for (int i = 0; i < 320; i++)
-		for(int j = 0; j < 240; j++)
-			plot_pixel(i,j,0);
+void clear_screen()
+{
+    for (int i = 0; i < 320; i++)
+        for (int j = 0; j < 240; j++)
+            plot_pixel(i, j, 0);
 }
-void swap(int *xp, int *yp) {
+void swap(int *xp, int *yp)
+{
     int temp = *xp;
     *xp = *yp;
     *yp = temp;
 }
-void draw_line(int x0, int y0, int x1, int y1, short int color) {
-	bool is_steep = abs(y1 - y0) > abs(x1 - x0);
-    int y_step;  
-	
-	if (is_steep) {
-  		  swap(&x0, &y0);
-          swap(&x1, &y1);			  
-	}
-     
-	if (x0 > x1) { 
-         swap(&x0, &x1);
-         swap(&y0, &y1);
-	}
-	
+void draw_line(int x0, int y0, int x1, int y1, short int color)
+{
+    bool is_steep = abs(y1 - y0) > abs(x1 - x0);
+    int y_step;
+
+    if (is_steep)
+    {
+        swap(&x0, &y0);
+        swap(&x1, &y1);
+    }
+
+    if (x0 > x1)
+    {
+        swap(&x0, &x1);
+        swap(&y0, &y1);
+    }
+
     int deltax = x1 - x0;
     int deltay = abs(y1 - y0);
     int error = -(deltax / 2);
     int y = y0;
-	
-    if (y0 < y1) {
-	   y_step = 1;
-    } else {
-	   y_step = -1;
+
+    if (y0 < y1)
+    {
+        y_step = 1;
+    }
+    else
+    {
+        y_step = -1;
     }
 
-    //for x from x0 to x1
-    for (int x = x0; x <= x1; x++)	{ 
-     	if (is_steep)	{
-        plot_pixel(y, x, color);
-     } else {
-        plot_pixel(x, y, color);
-	 }
-		
-     error = error + deltay; 
-		
-     if (error > 0) {
-         y = y + y_step;
-         error = error - deltax;
-     }
-  }
+    // for x from x0 to x1
+    for (int x = x0; x <= x1; x++)
+    {
+        if (is_steep)
+        {
+            plot_pixel(y, x, color);
+        }
+        else
+        {
+            plot_pixel(x, y, color);
+        }
+
+        error = error + deltay;
+
+        if (error > 0)
+        {
+            y = y + y_step;
+            error = error - deltax;
+        }
+    }
 }
 
-void plot_pixel(int x, int y, short int line_color)	{
+void plot_pixel(int x, int y, short int line_color)
+{
     *(short int *)(pixel_buffer_start + (y << 10) + (x << 1)) = line_color;
 }
 
 // draw 3x3 box centered at (x,y)
-void draw_box(int x, int y, short int color) {
+void draw_box(int x, int y, short int color)
+{
     int i, j;
-    for (i = 0; i <= 6; i++) {
-        for (j = 0; j <= 6; j++) {
-            plot_pixel(x-i, y-j, color);
-            plot_pixel(x-i, y+j, color);
-            plot_pixel(x+i, y-j, color);
-            plot_pixel(x+i, y+j, color);
+    for (i = 0; i <= 7; i++)
+    {
+        for (j = 0; j <= 7; j++)
+        {
+            plot_pixel(x - i, y - j, color);
+            plot_pixel(x - i, y + j, color);
+            plot_pixel(x + i, y - j, color);
+            plot_pixel(x + i, y + j, color);
         }
     }
 }
-	
-	
-	
-	
-	
-	
-	
