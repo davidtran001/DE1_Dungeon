@@ -158,7 +158,7 @@ struct health{
     int value;
     short int color;
     
-}
+};
 
 // global variables
 volatile int pixel_buffer_start; // global variable
@@ -258,7 +258,7 @@ int main(void) {
         // discard old drawings
         draw_box(player1.prev2_x, player1.prev2_y, 0x0);
         draw_player(player1.x, player1.y, player1.direction);
-        draw_healthBar(healthBar.value,);
+        //draw_healthBar(healthBar.value,);
         //printf("zombie position is (%d, %d) \n", z.x, z.y);
         //draw_box(z.prev2_x, z.prev2_y, 0x0);
         //draw_zombie(z.x, z.y, z.direction);
