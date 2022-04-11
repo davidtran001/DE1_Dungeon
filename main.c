@@ -372,7 +372,7 @@ void draw_barrell(int x, int y){
 	draw_box (x,y,barrell_color);
 }
 
-void calculate_healthBar(struct health *h, struct player play *p ){
+void calculate_healthBar(struct health *h, struct player *p){
     if((h->x- 50>= 0) && (h->x+ 50<= X_BOUND) && (h->y-6 >= 0) && h->y+6 <= Y_BOUND){
         int i, j;
         if(p->health = 100){
