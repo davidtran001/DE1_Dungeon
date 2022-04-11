@@ -161,6 +161,7 @@ int d_projectile = 8;
 int boundary[X_BOUND][Y_BOUND];
 struct zombie zombies[MAX_ZOMBIES];
 int num_zombies = 0;
+int zombie_buffer = 0;
 struct barrell barrells[MAX_BARRELLS];
 
 // global structs
