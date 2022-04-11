@@ -166,7 +166,7 @@ int player_color = 0xD376D7;
 int zombie_color = 0x00F000;
 int barrell_color = 0xFFC1CC;
 int green = 0x66cc00;
-int red = 0xbe1825;
+int red = 0x00f000;
 int dx = 2;
 int dy = 2;
 int d_projectile = 8;
@@ -414,7 +414,12 @@ void calculate_healthBar(struct health *h, struct player *p ){
         draw_healthBar(h->x,h->y,red);
         for(k = 1; k <= p->health; k++){          
             int i,j;
+			if((p->health)%2!=0){
             h->x = (p->health)/2;
+			}else{
+				p->health = p->health +1; 
+				h->x = (p->health)/2;
+			}
             for (i = 0; i<2; i++){
                 for (j = 0; j<=6;j++){
                      plot_pixel(h->x-i, h->y-j, green);
@@ -517,17 +522,19 @@ void shoot_projectile(int byte1, int byte2, int byte3, struct projectile *p, str
          }
 	     int k;
 		 for(k=0; k< MAX_ZOMBIES; k++){
-			 if(zombies[k].isAlive && ((barrells[j].x >= zombies[k].x-160)&&(barrells[j].x <= zombies[k].x+160))&&((barrells[j].y >= zombies[k].y-160)&&(barrells[j].y <= zombies[k].y+160))){
+			 if(zombies[k].isAlive && ((barrells[j].x >= zombies[k].x-260)&&(barrells[j].x <= zombies[k].x+260))&&((barrells[j].y >= zombies[k].y-260)&&(barrells[j].y <= zombies[k].y+260))){
 			   zombies[k].isAlive = false;
                num_zombies = num_zombies-1;
 			 }
-		 
-		 if(((barrells[j].x >= play.x-160)&&(barrells[j].x <= play.x+160))&&((barrells[j].y >= play.y-160)&&(barrells[j].y >= play.y+160)))
+			 int z;
+		 for(z = 100; z >0;z --){
+		 if(((barrells[j].x >= play.x-260)&&(barrells[j].x <= play.x+260))&&((barrells[j].y >= play.y-260)&&(barrells[j].y >= play.y+260)))
 		       play.health -= 1;
 			  if (play.health <= 0){
 				  play.isAlive = false;
 			  }
 		 }	    
+	   }
 	   }
 		p->isActive = false;
 	    boundary[p->x][p->y] = EMPTY_CODE;   
@@ -724,6 +731,7 @@ void draw_box(int x, int y, short int color) {
         }
     }
 }
+	
 	
 	
 	
