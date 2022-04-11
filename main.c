@@ -148,13 +148,24 @@ struct barrell {
     int y;
 	bool isActive;
 };
-
+struct health{
+    int x;
+    int y;
+    int prev_x;
+    int prev_y;
+    int prev2_x;
+    int prev2_y;
+    int value;
+    short int color;
+    
+}
 
 // global variables
 volatile int pixel_buffer_start; // global variable
 int player_color = 0xD376D7;
 int zombie_color = 0x00F000;
 int barrell_color = 0xFFC1CC;
+int green = 0x66cc00;
 int dx = 2;
 int dy = 2;
 int d_projectile = 8;
@@ -166,7 +177,7 @@ struct barrell barrells[MAX_BARRELLS];
 // global structs
 struct player player1 = {X_BOUND/2, Y_BOUND/2, X_BOUND/2, Y_BOUND/2, X_BOUND/2, Y_BOUND/2, 0, 100, true};
 struct projectile proj1 = {0,0,0,0,0,0,0,false,BASE_PROJECTILE_SPEED};
-
+struct health healthBar= {X_BOUND/2, Y_BOUND/2, X_BOUND/2, Y_BOUND/2, X_BOUND/2, Y_BOUND/2,100};
 // function prototypes
 struct zombie spawn_zombie();
 void draw_zombie(int x, int y, int direction);
@@ -197,7 +208,7 @@ int main(void) {
         }
     }
     boundary[player1.x][player1.y] = PLAYER_CODE;
-
+    boundary[healthBar.x][healthBar.y] = PLAYER_CODE;
     // initialize zombies
     for (i = 0; i < MAX_ZOMBIES; i++) {
         struct zombie z = spawn_zombie(i);
@@ -246,7 +257,7 @@ int main(void) {
         // discard old drawings
         draw_box(player1.prev2_x, player1.prev2_y, 0x0);
         draw_player(player1.x, player1.y, player1.direction);
-        
+        draw_healthBar(healthBar.value,);
         //printf("zombie position is (%d, %d) \n", z.x, z.y);
         //draw_box(z.prev2_x, z.prev2_y, 0x0);
         //draw_zombie(z.x, z.y, z.direction);
@@ -343,6 +354,37 @@ void draw_projectile(int x, int y) {
 void draw_barrell(int x, int y){
 	draw_box (x,y,barrell_color);
 }
+
+void calculate_healthBar(struct health *h, struct player play *p ){
+    if((h->x- 50>= 0) && (h->x+ 50<= X_BOUND) && (h->y-6 >= 0) && h->y+6 <= Y_BOUND){
+        int i, j;
+        if(p->health = 100){
+             for (i = 0; i < 50; i++) {
+                 for (j = 0; j <= 6; j++) {
+                     plot_pixel(x-i, y-j, green);
+                     plot_pixel(x-i, y+j, green);
+                     plot_pixel(x+i, y-j, green);
+                     plot_pixel(x+i, y+j, green);
+                 }
+             }
+        }
+    }
+    else{ 
+        int k;
+        for(k = 99; k >= p->health; k--){
+            int i,j;
+            for (i = 0; i<2; i++){
+                for (j = 0; j<=6;j++){
+                     plot_pixel(x-i, y-j, red);
+                     plot_pixel(x-i, y+j, red);
+                     plot_pixel(x+i, y-j, red);
+                     plot_pixel(x+i, y+j, red);
+                 }
+             }
+
+        }
+    }	
+}
 void shoot_projectile(int byte1, int byte2, int byte3, struct projectile *p, struct player play) {
     if (byte1 == byte3 && byte2 == 0xF0);
 
@@ -385,7 +427,8 @@ void shoot_projectile(int byte1, int byte2, int byte3, struct projectile *p, str
            //printf("HIT ZOMBIE %d", zombie_id);
            zombies[i].health -= 1; // projectile hits zombie and the zombie's health will decrease
            if (zombies[i].health <= 0) { // if the zombie has <= 0 health then it is dead
-              zombies[i].isAlive = false;								              
+              zombies[i].isAlive = false;
+              num_zombies = num_zombies-1;								              
            }
 			p->isActive = false;
 			boundary[p->x][p->y] = EMPTY_CODE;
@@ -399,10 +442,14 @@ void shoot_projectile(int byte1, int byte2, int byte3, struct projectile *p, str
 		 for(k=0; k< MAX_ZOMBIES; k++){
 			 if(((barrells[j].x >= zombies[k].x-160)&&(barrells[j].x <= zombies[k].x+160))&&((barrells[j].y >= zombies[k].y-160)&&(barrells[j].y <= zombies[k].y+160))){
 			   zombies[k].isAlive = false;
+               num_zombies = num_zombies-1;
 			 }
 		 
 		 if(((barrells[j].x >= play.x-160)&&(barrells[j].x <= play.x+160))&&((barrells[j].y >= play.y-160)&&(barrells[j].y >= play.y+160)))
-		      play.isAlive = false;
+		       play.health -= 1;
+			  if (play.health <= 0){
+				  play.isAlive = false;
+			  }
 		 }	    
 	   }
 		p->isActive = false;
