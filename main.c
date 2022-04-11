@@ -370,11 +370,23 @@ void draw_projectile(int x, int y) {
 void draw_barrell(int x, int y){
 	draw_box (x,y,barrell_color);
 }
-
+void draw_healthBar(int x, int y, short int color){
+    int i, j;
+        if(p->health ==100){
+             for (i = 0; i < 50; i++) {
+                 for (j = 0; j <= 6; j++) {
+                     plot_pixel(x-i, y-j, green);
+                     plot_pixel(x-i, y+j, green);
+                     plot_pixel(x+i, y-j, green);
+                     plot_pixel(x+i, y+j, green);
+                 }
+             }
+        }
+}
 void calculate_healthBar(struct health *h, struct player play *p ){
     if((h->x- 50>= 0) && (h->x+ 50<= X_BOUND) && (h->y-6 >= 0) && h->y+6 <= Y_BOUND){
         int i, j;
-        if(p->health = 100){
+        if(p->health ==100){
              for (i = 0; i < 50; i++) {
                  for (j = 0; j <= 6; j++) {
                      plot_pixel(x-i, y-j, green);
@@ -391,10 +403,10 @@ void calculate_healthBar(struct health *h, struct player play *p ){
             int i,j;
             for (i = 0; i<2; i++){
                 for (j = 0; j<=6;j++){
-                     plot_pixel(x-i, y-j, red);
-                     plot_pixel(x-i, y+j, red);
-                     plot_pixel(x+i, y-j, red);
-                     plot_pixel(x+i, y+j, red);
+                     plot_pixel(x-i, y-j, green);
+                     plot_pixel(x-i, y+j, green);
+                     plot_pixel(x+i, y-j, green);
+                     plot_pixel(x+i, y+j, green);
                  }
              }
 
