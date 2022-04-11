@@ -263,7 +263,7 @@ int main(void) {
         //draw_box(z.prev2_x, z.prev2_y, 0x0);
         //draw_zombie(z.x, z.y, z.direction);
 
-        if (num_zombies < 5) {
+        if (num_zombies <= 5) {
             zombie_buffer += 1;
             if (zombie_buffer >= 8000) {
                 for (i = 0; i < MAX_ZOMBIES; i++) {
