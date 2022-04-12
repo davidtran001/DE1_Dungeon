@@ -529,7 +529,6 @@ void calculate_healthBar(struct health *h, struct player *p)
         }
     }
 }
-
 /*int collision(struct zombie *z, struct player *p,  struct barrell *b, struct health *h){
      if((z->x == p->x) || (z->x == b->x)||(z->x == h->x)||
         (z->y == p->y) || (z->y == b->y)||(z->y == h->y)||
