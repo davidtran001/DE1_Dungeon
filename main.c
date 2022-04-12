@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <time.h>
 #include <math.h>
-#include <unistd.h>
+
 
 // global models
 const uint16_t player_down[15][15] = {
@@ -434,6 +434,8 @@ struct health
 
 // global variables
 volatile int pixel_buffer_start; // global variable
+volatile int *HEX = HEX3_HEX0_BASE;
+char seg7[] = {0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,0x7f,0x67};
 int player_color = 0xD376D7;
 int zombie_color = 0x00F000;
 int barrell_color = 0xFFC1CC;
@@ -469,7 +471,6 @@ struct barrell spawn_barrell(int barrell_id);
 struct zombie spawn_zombie();
 void draw_healthBar(int x, int y, short int color);
 void calculate_healthBar(struct health *h, struct health *g, struct player *p);
-//int collision(struct zombie *z, struct player *p,  struct barrell *b, struct health *h);
 void draw_zombie(int x, int y, int direction);
 void save_twoframes(int *prev_pos_x, int *prev_pox_y, int *prev2_pos_x, int *prev2_pos_y, int x_pos, int y_pos);
 void draw_projectile(int x, int y);
@@ -552,8 +553,24 @@ int main(void)
     while (1)
     {    //printf("health = %d\n",player1.health);
         // write num_points to HEX display
-        *HEX_ptr = num_points;
-
+        //*HEX_ptr = num_points;
+		//num_points = 105;
+		if(num_points<10){
+        *HEX = seg7[num_points];
+		}else if(num_points < 100){
+			int a,b;
+			a = num_points%10;
+			b = (num_points - a)/10;
+			*HEX = (seg7[b]<<8) | seg7 [a];
+		}else if(num_points < 1000){
+			int m, n, o;
+			m = (num_points%100)%10;
+			n = (num_points%100-i)/10;
+			o = (num_points - 10j -i)/100;
+			*HEX = (seg7[o]<<16)|(seg7[n]<<8)|seg7[m];
+		}
+		
+			
         // PS/2 keyboard input
         PS2_data = *(PS2_ptr);        // read the Data register in the PS/2 port
         RVALID = (PS2_data & 0x8000); // extract the RVALID field
@@ -719,11 +736,7 @@ int main(void)
 
         wait_for_vsync();                           // swap front and back buffers on VGA vertical sync
         pixel_buffer_start = *(pixel_ctrl_ptr + 1); // new back buffer
-    //}
-    //else{
-
-    //}
-		
+        	
     }
 }
 
@@ -795,22 +808,23 @@ void draw_healthBar(int x, int y, short int color)
     int i, j;
     for (i = 0; i < 25; i++)
     {
-        for (j = 0; j <=2; j++)
+        for (j = 0; j <3; j++)
         {
-            plot_pixel(x - i, y - j -2, color);
-            plot_pixel(x - i, y + j -2, color);
-            plot_pixel(x + i, y - j -2, color);
-            plot_pixel(x + i, y + j -2, color);
+            plot_pixel(x - i, y - j -3, color);
+            plot_pixel(x - i, y + j -3, color);
+            plot_pixel(x + i, y - j -3, color);
+            plot_pixel(x + i, y + j -3, color);
         }
     }
 }
 void calculate_healthBar(struct health *h, struct health *g, struct player *p)
 {   
-	h->x = p->x;
-	h->y = p->y-9;
-    if ((h->x - 25 >= 0) && (h->x + 25 <= X_BOUND) && (h->y - 2 >= 0) && h->y + 2 <= Y_BOUND)
+	//h->x = p->x;
+	//h->y = p->y-10;
+    if ((h->x - 25 >= 0) && (h->x + 25 <= X_BOUND) && (h->y -3 >=0) && (h->y + 3 <= Y_BOUND))
     {
-   
+        h->x = p->x;
+	    h->y = p->y-10;
         if (p->health == 100)
         {
             draw_healthBar(h->x, h->y, green);
@@ -847,11 +861,11 @@ void calculate_healthBar(struct health *h, struct health *g, struct player *p)
             for (i = 0; i < a; i++)
             {
                 
-                    plot_pixel(x + i, y -2 -2, green);
-                    plot_pixel(x + i, y - 1-2, green);
-				    plot_pixel(x + i, y -2, green); 
-				    plot_pixel(x + i, y + 1-2, green);
-				  plot_pixel(x + i, y + 2-2, green);
+                    plot_pixel(x + i, y -2 -3, green);
+                    plot_pixel(x + i, y - 1-3, green);
+				    plot_pixel(x + i, y -3, green); 
+				    plot_pixel(x + i, y + 1-3, green);
+				  plot_pixel(x + i, y + 2-3, green);
                 }
             //}
         }
@@ -1249,6 +1263,10 @@ void draw_box(int x, int y, short int color)
     }
 }
 
+	
+	
+	
+	
 	
 	
 	
