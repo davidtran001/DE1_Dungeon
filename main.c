@@ -821,8 +821,8 @@ void calculate_healthBar(struct health *h, struct health *g, struct player *p)
 {   
 	//h->x = p->x;
 	//h->y = p->y-10;
-    if ((h->x - 25 >= 0) && (h->x + 25 <= X_BOUND) && (h->y -3 >=0) && (h->y + 3 <= Y_BOUND))
-    {
+    //if ((h->x - 25 >= 0) && (h->x + 25 <= X_BOUND) && (h->y -3 >=0) && (h->y + 3 <= Y_BOUND))
+    //{
         h->x = p->x;
 	    h->y = p->y-10;
         if (p->health == 100)
@@ -834,8 +834,8 @@ void calculate_healthBar(struct health *h, struct health *g, struct player *p)
             draw_healthBar(h->x, h->y, red);
         }
     
-    else
-    {
+       else
+       {
         int k;
         draw_healthBar(h->x, h->y, red);
         //for (k = 1; k <= p->health; k++)
@@ -869,7 +869,7 @@ void calculate_healthBar(struct health *h, struct health *g, struct player *p)
                 }
             //}
         }
-    }
+     //}
 }
 /*int collision(struct zombie *z, struct player *p,  struct barrell *b, struct health *h){
      if((z->x == p->x) || (z->x == b->x)||(z->x == h->x)||
@@ -1073,7 +1073,7 @@ void player_movement(int byte1, int byte2, int byte3, struct player *p)
     // standard movement
     if (byte3 == W_PRESS)
     { // W pressed, go up
-        if (p->y >= 7)
+        if (p->y >= 17)
         {
             boundary[p->x][p->y] = EMPTY_CODE;
             p->y = p->y - dy;
@@ -1095,7 +1095,7 @@ void player_movement(int byte1, int byte2, int byte3, struct player *p)
     }
     else if (byte3 == A_PRESS)
     { // A pressed, go left
-        if (p->x >= 7)
+        if (p->x >= 25)
         {
             boundary[p->x][p->y] = EMPTY_CODE;
             p->x = p->x - dx;
@@ -1106,7 +1106,7 @@ void player_movement(int byte1, int byte2, int byte3, struct player *p)
     }
     else if (byte3 == D_PRESS)
     { // D pressed, go right
-        if (p->x < X_BOUND - 7)
+        if (p->x < X_BOUND - 25)
         {
             boundary[p->x][p->y] = EMPTY_CODE;
             p->x = p->x + dx;
