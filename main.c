@@ -550,7 +550,7 @@ int main(void)
 
     // main loop
     while (1)
-    {
+    {    //printf("health = %d\n",player1.health);
         // write num_points to HEX display
         *HEX_ptr = num_points;
 
@@ -795,7 +795,7 @@ void draw_healthBar(int x, int y, short int color)
     int i, j;
     for (i = 0; i < 25; i++)
     {
-        for (j = 0; j <2; j++)
+        for (j = 0; j <=2; j++)
         {
             plot_pixel(x - i, y - j -2, color);
             plot_pixel(x - i, y + j -2, color);
@@ -836,21 +836,22 @@ void calculate_healthBar(struct health *h, struct health *g, struct player *p)
                 p->health = p->health + 1;
                 h->x = (p->health) / 2;
             }*/
-			int x = (h->x) - (100-p->health)/2;
+			/*int x = (h->x) - (100-p->health);
 			int y = h->y;
-		    int a = 25*(p->health)/100;
+		    int a = 25*(p->health)/100;*/
+		int x = h->x - 24;
+		int y = h->y ;
+		int a = 50*(p->health)/100;
             g->x = x;
             g->y = y;
             for (i = 0; i < a; i++)
             {
-                for (j = 0; j < 2; j++)
-                {   
-					
-                    plot_pixel(x - i, y - j-2, green);
-                    plot_pixel(x - i, y + j-2, green);
-                    plot_pixel(x + i, y - j-2, green);
-                    plot_pixel(x + i, y + j-2, green);
-				}
+                
+                    plot_pixel(x + i, y -2 -2, green);
+                    plot_pixel(x + i, y - 1-2, green);
+				    plot_pixel(x + i, y -2, green); 
+				    plot_pixel(x + i, y + 1-2, green);
+				  plot_pixel(x + i, y + 2-2, green);
                 }
             //}
         }
@@ -1106,7 +1107,7 @@ void player_movement(int byte1, int byte2, int byte3, struct player *p)
             if (!p->invincible && ((p->x >= zombies[i].x - 6) && (p->x <= zombies[i].x + 6)) && ((p->y >= zombies[i].y - 6) && (p->y <= zombies[i].y + 6)))
             {
                 // printf("HIT ZOMBIE %d", zombie_id);
-                p->health -= 5; // projectile hits zombie and the zombie's health will decrease
+                p->health -= 1; // projectile hits zombie and the zombie's health will decrease
                 if (p->isAlive && p->health <= 0)
                 { // if the zombie has <= 0 health then it is dead
                     p->isAlive = false;
