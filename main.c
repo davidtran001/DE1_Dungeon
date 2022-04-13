@@ -1021,7 +1021,7 @@ void draw_title_screen()
 
 void zombie_movement(int zombie_id, struct player *p)
 {
-    if (zombies[zombie_id].isAlive && zombies[zombie_id].y >= 7 && zombies[zombie_id].y < Y_BOUND - 7 && zombies[zombie_id].x >= 7 && zombies[zombie_id].x < X_BOUND - 7)
+    if (zombies[zombie_id].isAlive && zombies[zombie_id].y >= 7 && zombies[zombie_id].y <= Y_BOUND - 7 && zombies[zombie_id].x >= 7 && zombies[zombie_id].x <= X_BOUND - 7)
     {
         int dir_x = player1.x + 10 * zombie_id - zombies[zombie_id].x;
         int dir_y = player1.y + 10 * zombie_id - zombies[zombie_id].y;
@@ -1299,7 +1299,7 @@ void update_projectile(struct projectile *p, struct player *play)
                     }
                 }
 
-                if (((barrells[j].x >= play->x - 160) && (barrells[j].x <= play->x + 160)) && ((barrells[j].y >= play->y - 160) && (barrells[j].y <= play->y + 160)))
+                if (((barrells[j].x >= play->x - 60) && (barrells[j].x <= play->x + 60)) && ((barrells[j].y >= play->y - 60) && (barrells[j].y <= play->y + 60)))
                     play->health -= 10;
                 play->invincible = true;
                 if (play->health <= 0)
@@ -1433,8 +1433,8 @@ void player_movement(int byte1, int byte2, int byte3, struct player *p)
     int i;
     for (i = 0; i < MAX_ZOMBIES; i++)
     {
-        if (!p->invincible && ((p->x >= zombies[i].x - 6) && (p->x <= zombies[i].x + 6)) && ((p->y >= zombies[i].y - 6) && (p->y <= zombies[i].y + 6)))
-        {
+        if (!p->invincible && ((p->x  >= zombies[i].x - 6) && (p->x <= zombies[i].x + 6)) && ((p->y >= zombies[i].y - 6) && (p->y <= zombies[i].y + 6)))		
+        {                     
             // printf("HIT ZOMBIE %d", zombie_id);
             p->health -= 1; // projectile hits zombie and the zombie's health will decrease
             if (p->isAlive && p->health <= 0)
@@ -1599,3 +1599,5 @@ void draw_box(int x, int y, short int color)
         }
     }
 }
+
+	
