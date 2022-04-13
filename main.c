@@ -461,6 +461,11 @@ struct player player1 = {X_BOUND / 2, Y_BOUND / 2, X_BOUND / 2, Y_BOUND / 2, X_B
 struct projectile proj1 = {0, 0, 0, 0, 0, 0, 0, false, BASE_PROJECTILE_SPEED};
 struct projectile proj2 = {0, 0, 0, 0, 0, 0, 0, false, BASE_PROJECTILE_SPEED};
 struct projectile proj3 = {0, 0, 0, 0, 0, 0, 0, false, BASE_PROJECTILE_SPEED};
+struct projectile proj4 = {0, 0, 0, 0, 0, 0, 0, false, BASE_PROJECTILE_SPEED};
+struct projectile proj5 = {0, 0, 0, 0, 0, 0, 0, false, BASE_PROJECTILE_SPEED};
+struct projectile proj6 = {0, 0, 0, 0, 0, 0, 0, false, BASE_PROJECTILE_SPEED};
+struct projectile proj7 = {0, 0, 0, 0, 0, 0, 0, false, BASE_PROJECTILE_SPEED};
+struct projectile proj8 = {0, 0, 0, 0, 0, 0, 0, false, BASE_PROJECTILE_SPEED};
 struct health healthBar = {X_BOUND / 2, Y_BOUND / 2, X_BOUND / 2, Y_BOUND / 2, X_BOUND / 2, Y_BOUND / 2};
 struct health green_health = {X_BOUND / 2, Y_BOUND / 2, X_BOUND / 2, Y_BOUND / 2, X_BOUND / 2, Y_BOUND / 2};
 
@@ -652,6 +657,36 @@ int main(void)
             } else {
                 plot_pixel(proj3.prev2_x, proj3.prev2_y, 0x0);
             }
+			if (proj4.isActive) {
+                plot_pixel(proj4.prev2_x, proj4.prev2_y, 0x0);
+                draw_projectile(proj4.x, proj4.y);
+            } else {
+                plot_pixel(proj4.prev2_x, proj4.prev2_y, 0x0);
+            }
+			if (proj5.isActive) {
+                plot_pixel(proj5.prev2_x, proj5.prev2_y, 0x0);
+                draw_projectile(proj5.x, proj5.y);
+            } else {
+                plot_pixel(proj5.prev2_x, proj5.prev2_y, 0x0);
+            }
+			if (proj6.isActive) {
+                plot_pixel(proj6.prev2_x, proj6.prev2_y, 0x0);
+                draw_projectile(proj6.x, proj6.y);
+            } else {
+                plot_pixel(proj6.prev2_x, proj6.prev2_y, 0x0);
+            }
+			if (proj7.isActive) {
+                plot_pixel(proj7.prev2_x, proj7.prev2_y, 0x0);
+                draw_projectile(proj7.x, proj7.y);
+            } else {
+                plot_pixel(proj7.prev2_x, proj7.prev2_y, 0x0);
+            }
+			if (proj8.isActive) {
+                plot_pixel(proj8.prev2_x, proj8.prev2_y, 0x0);
+                draw_projectile(proj8.x, proj8.y);
+            } else {
+                plot_pixel(proj8.prev2_x, proj8.prev2_y, 0x0);
+            }
             draw_box(player1.prev2_x, player1.prev2_y, 0x0);
             //draw_healthBar(healthBar.prev2_x,healthBar.prev2_y,0x0);
             //draw_healthBar(healthBar.prev_x,healthBar.prev_y,0x0);
@@ -708,6 +743,11 @@ int main(void)
             save_twoframes(&proj1.prev_x, &proj1.prev_y, &proj1.prev2_x, &proj1.prev2_y, proj1.x, proj1.y);
             save_twoframes(&proj2.prev_x, &proj2.prev_y, &proj2.prev2_x, &proj2.prev2_y, proj2.x, proj2.y);
             save_twoframes(&proj3.prev_x, &proj3.prev_y, &proj3.prev2_x, &proj3.prev2_y, proj3.x, proj3.y);
+			save_twoframes(&proj4.prev_x, &proj4.prev_y, &proj4.prev2_x, &proj4.prev2_y, proj4.x, proj4.y);
+			save_twoframes(&proj5.prev_x, &proj5.prev_y, &proj5.prev2_x, &proj5.prev2_y, proj5.x, proj5.y);
+			save_twoframes(&proj6.prev_x, &proj6.prev_y, &proj6.prev2_x, &proj6.prev2_y, proj6.x, proj6.y);
+			save_twoframes(&proj7.prev_x, &proj7.prev_y, &proj7.prev2_x, &proj7.prev2_y, proj7.x, proj7.y);
+			save_twoframes(&proj8.prev_x, &proj8.prev_y, &proj8.prev2_x, &proj8.prev2_y, proj8.x, proj8.y);
             save_twoframes(&healthBar.prev_x, &healthBar.prev_y, &healthBar.prev2_x, &healthBar.prev2_y, healthBar.x, healthBar.y);
             save_twoframes(&green_health.prev_x, &green_health.prev_y, &green_health.prev2_x, &green_health.prev2_y, green_health.x, green_health.y);
         }
@@ -715,10 +755,21 @@ int main(void)
         if (!proj1.isActive) shoot_projectile(byte1, byte2, byte3, &proj1, player1);
         else if (!proj2.isActive) shoot_projectile(byte1, byte2, byte3, &proj2, player1);
         else if (!proj3.isActive) shoot_projectile(byte1, byte2, byte3, &proj3, player1);
+		else if (!proj4.isActive) shoot_projectile(byte1, byte2, byte3, &proj4, player1);
+		else if (!proj5.isActive) shoot_projectile(byte1, byte2, byte3, &proj5, player1);
+		else if (!proj6.isActive) shoot_projectile(byte1, byte2, byte3, &proj6, player1);
+		else if (!proj7.isActive) shoot_projectile(byte1, byte2, byte3, &proj7, player1);
+		else if (!proj8.isActive) shoot_projectile(byte1, byte2, byte3, &proj8, player1);
 
         update_projectile(&proj1, &player1);
         update_projectile(&proj2, &player1);
         update_projectile(&proj3, &player1);
+		update_projectile(&proj4, &player1);
+        update_projectile(&proj5, &player1);
+        update_projectile(&proj6, &player1);
+		update_projectile(&proj7, &player1);
+        update_projectile(&proj8, &player1);
+    
 
 
         // PS/2 keyboard input
