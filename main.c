@@ -1402,6 +1402,7 @@ int main(void)
 
         else if (player1.isAlive || restart)
         {
+            restart = false;
             if (title_step)
             {
                 clear_screen();
