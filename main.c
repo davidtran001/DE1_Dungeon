@@ -1939,6 +1939,7 @@ void update_projectile(struct projectile *p, struct player *play)
                 break;
             }
         }
+		// barrell hit detection
         for (j = 0; j < MAX_BARRELLS; j++)
         {
             if (barrells[j].isActive && ((p->x >= barrells[j].x - 8) && (p->x <= barrells[j].x + 11)) && ((p->y >= barrells[j].y - 8) && (p->y <= barrells[j].y + 11)))
