@@ -1348,10 +1348,10 @@ int main(void)
                 }
             }
 
-            //draw_healthBar(healthBar.prev2_x, healthBar.prev2_y, 0x0);
-            //draw_healthBar(green_health.prev2_x, green_health.prev2_y, 0x0);
+            draw_healthBar(healthBar.prev2_x, healthBar.prev2_y, 0x0);
+            draw_healthBar(green_health.prev2_x, green_health.prev2_y, 0x0);
             //draw_box(player1.prev2_x, player1.prev2_y, 15, 0x0);
-            replace_background(player1.prev2_x, player1.prev2_y, 30);
+            replace_background(player1.prev2_x, player1.prev2_y, 30, 30);
         
 
             for (i = 0; i < MAX_PROJECTILES; i++) {
@@ -1424,7 +1424,7 @@ int main(void)
                 }
             }
             // player1.health = 80;
-            //calculate_healthBar(&healthBar, &green_health, &player1);
+            calculate_healthBar(&healthBar, &green_health, &player1);
 
             save_twoframes(&player1.prev_x, &player1.prev_y, &player1.prev2_x, &player1.prev2_y, player1.x, player1.y);
             save_twoframes(&healthBar.prev_x, &healthBar.prev_y, &healthBar.prev2_x, &healthBar.prev2_y, healthBar.x, healthBar.y);
@@ -1749,7 +1749,7 @@ void clean_zombie(int x, int y)
         for (j = 0; j < 31; j++)
         {
             if (ghost[i][j] != 0)
-                plot_pixel(x - 15 + j, y - 15 + i, 0x0);
+                plot_pixel(x - 15 + j, y - 15 + i, background[y - 15 + i][x - 15 + j]);
         }
     }
 }
@@ -2167,13 +2167,13 @@ void draw_box(int x, int y, int w, short int color)
     }
 }
 
-// draw w x w box centered at (x,y)
-void replace_background(int x, int y, int w)
+// draw w x l box centered at (x,y)
+void replace_background(int x, int y, int w, int l)
 {
     int i, j;
     for (i = 0; i <= w/2; i++)
     {
-        for (j = 0; j <= w/2; j++)
+        for (j = 0; j <= l/2; j++)
         {
             plot_pixel(x - i, y - j, background[y - j][x - i]);
             plot_pixel(x - i, y + j, background[y + j][x - i]);
