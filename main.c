@@ -1341,12 +1341,7 @@ int main(void)
     // main loop
     while (1)
     { 
-        printf("%d\n", player1.invincible);
-        //printf("health = %d\n",player1.health);
-
         // write num_points to HEX display
-        //*HEX_ptr = num_points;
-        // num_points = 105;
         if (num_points < 10)
         {
             *HEX = seg7[num_points];
@@ -1376,7 +1371,6 @@ int main(void)
             byte1 = byte2;
             byte2 = byte3;
             byte3 = PS2_data & 0xFF;
-            // printf("byte1 is %d, byte2 is %d, byte3 is %d \n", byte1, byte2, byte3);
         }
 
         if (title_screen)
@@ -1442,13 +1436,12 @@ int main(void)
 
                 if (!zombies[i].isAlive)
                 {
-                    //printf("here\n");
                     zombie_buffer += 1;
                     if (zombies[i].death_frame < 2) {
                         clean_zombie(zombies[i].prev2_x, zombies[i].prev2_y);
                         clean_zombie(zombies[i].x, zombies[i].y);
                         zombies[i].death_frame += 1;
-                    } else if (zombie_buffer == 100) {
+                    } else if (zombie_buffer >= 100) {
                         struct zombie z = spawn_zombie(i);
                         zombies[i] = z;
                         zombie_buffer = 0;
@@ -1532,7 +1525,6 @@ int main(void)
             byte1 = byte2;
             byte2 = byte3;
             byte3 = PS2_data & 0xFF;
-            // printf("byte1 is %d, byte2 is %d, byte3 is %d \n", byte1, byte2, byte3);
         }
         player_movement(byte1, byte2, byte3, &player1);
 
@@ -1685,7 +1677,6 @@ void zombie_movement(int zombie_id, struct player *p)
     }
     if (!p->invincible && ((p->x >= zombies[zombie_id].x - 13) && (p->x <= zombies[zombie_id].x + 13)) && ((p->y >= zombies[zombie_id].y - 13) && (p->y <= zombies[zombie_id].y + 13)))
     {
-        // printf("HIT ZOMBIE %d", zombie_id);
         p->health -= 1; // projectile hits zombie and the zombie's health will decrease
         if (p->isAlive && p->health <= 0)
         { // if the zombie has <= 0 health then it is dead
@@ -1980,7 +1971,6 @@ void shoot_projectile(int byte1, int byte2, int byte3, struct projectile *p, str
     // when I is pressed, initialize the starting position of the projectile and set it to active
     else if (byte3 == I_PRESS && !p->isActive)
     {
-        // printf("projectile has been launched\n");
         boundary[p->x][p->y] = EMPTY_CODE;
         p->x = play.x;
         p->y = play.y;
