@@ -1213,6 +1213,8 @@ void initialize_game();
 void draw_end_screen();
 void clear_healthBar(int x, int y);
 void clear_green(int x, int y);
+void replace_background(int x, int y, int w, int l);
+void draw_background();
 
 int main(void)
 {
@@ -1408,7 +1410,7 @@ int main(void)
                     }
                     // draw_box(zombies[i].prev2_x, zombies[i].prev2_y, 0x0);
                     clean_zombie(zombies[i].prev2_x, zombies[i].prev2_y);
-					
+                    					
                     draw_zombie(zombies[i].x, zombies[i].y, zombies[i].direction);
                 }
                 save_twoframes(&zombies[i].prev_x, &zombies[i].prev_y, &zombies[i].prev2_x, &zombies[i].prev2_y, zombies[i].x, zombies[i].y);
@@ -1459,33 +1461,6 @@ int main(void)
 
         wait_for_vsync();                           // swap front and back buffers on VGA vertical sync
         pixel_buffer_start = *(pixel_ctrl_ptr + 1); // new back buffer
-    }
-}
-
-void play_audio() {
-    volatile int * audio_ptr = (int *)AUDIO_BASE;
-    /* used for audio record/playback */
-    int fifospace;
-    int record = 0, play = 0, buffer_index = 0;
-    int left_buffer[BUF_SIZE];
-    int right_buffer[BUF_SIZE];
-    
-    while (1) {
-        fifospace = *(audio_ptr + 1); // read the audio port fifospace register
-        if ((fifospace & 0x00FF0000) > BUF_THRESHOLD) // check WSRC
-        {
-            // output data until the buffer is empty or the audio-out FIFO
-            // is full
-            while ((fifospace & 0x00FF0000) && (buffer_index < BUF_SIZE)) {
-                *(audio_ptr + 2) = left_buffer[buffer_index];
-                *(audio_ptr + 3) = right_buffer[buffer_index];
-                ++buffer_index;
-                if (buffer_index == BUF_SIZE) { // done playback
-                    return;
-                }
-                fifospace = *(audio_ptr + 1); // read the audio port fifospace register
-            }
-        }
     }
 }
 
@@ -1688,8 +1663,8 @@ void draw_healthBar(int x, int y, short int color)
         plot_pixel(x + i - (w-1)/2, y + 1 - y_offset, color);
         plot_pixel(x + i - (w-1)/2, y + 2 - y_offset, color);
     }
-
 }
+
 
 void clear_healthBar(int x, int y)
 {
@@ -1706,6 +1681,7 @@ void clear_healthBar(int x, int y)
         plot_pixel(x + i - (w-1)/2, y + 2 - y_offset, background[y + 2 - y_offset][x + i - (w-1)/2]);
     }
 }
+
 void calculate_healthBar(struct health *h, struct health *g, struct player *p)
 {
     // h->x = p->x;
@@ -1797,7 +1773,6 @@ void clean_zombie(int x, int y)
         }
     }
 }
-
 
 // save the position of a "object" two frames ago
 void save_twoframes(int *prev_pos_x, int *prev_pox_y, int *prev2_pos_x, int *prev2_pos_y, int x_pos, int y_pos)
@@ -2044,7 +2019,7 @@ void player_movement(int byte1, int byte2, int byte3, struct player *p)
     for (i = 0; i < MAX_ZOMBIES; i++)
     {
         if (!p->invincible && ((p->x  >= zombies[i].x - 13 ) && (p->x <= zombies[i].x + 13)) && ((p->y >= zombies[i].y - 13) && (p->y <= zombies[i].y + 13)))		
-        {                     
+        {                                         
             // printf("HIT ZOMBIE %d", zombie_id);
             p->health -= 1; // projectile hits zombie and the zombie's health will decrease
             if (p->isAlive && p->health <= 0)
@@ -2064,7 +2039,7 @@ void draw_player(int x, int y, int direction)
     int img_size = 31;
     int r = 15;
     if (direction == UP_CODE)
-    { // player looking upca
+    { // player looking up
         for (i = 0; i < img_size; i++)
         {
             for (j = 0; j < img_size; j++)
@@ -2227,7 +2202,4 @@ void replace_background(int x, int y, int w, int l)
         }
     }
 }
-
-	
-	
 	
