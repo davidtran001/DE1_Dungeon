@@ -947,6 +947,50 @@ const uint16_t barrell[19][13] = {
 
 };
 
+const uint16_t dagger_up[12][2] = {
+	{60842,0},
+	{60842,58505},
+	{60842,58505},
+	{60842,58505},
+	{60842,58505},
+	{60842,58505},
+	{60842,58505},
+	{25191,25191},
+	{29384,25191},
+	{29384,25191},
+	{29384,25191},
+	{29384,25191},
+
+};
+
+const uint16_t dagger_down[12][2] = {
+	{29384,25191},
+	{29384,25191},
+	{29384,25191},
+	{29384,25191},
+	{25191,25191},
+	{60842,58505},
+	{60842,58505},
+	{60842,58505},
+	{60842,58505},
+	{60842,58505},
+	{60842,58505},
+	{60842,0},
+
+};
+
+const uint16_t dagger_left[2][12] = {
+	{60842,60842,60842,60842,60842,60842,60842,25191,29384,29384,29384,29384},
+	{0,58505,58505,58505,58505,58505,58505,25191,25191,25191,25191,25191},
+
+};
+
+const uint16_t dagger_right[2][12] = {
+	{29384,29384,29384,29384,25191,60842,60842,60842,60842,60842,60842,60842},
+	{25191,25191,25191,25191,25191,58505,58505,58505,58505,58505,58505,0},
+
+};
+
 const uint16_t START_TEXT[45][320] = {
 	{65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535},
 	{65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535},
@@ -1126,6 +1170,7 @@ struct projectile
     int direction;
     bool isActive;
     int speed;
+    int death_frame;
 };
 
 struct zombie
@@ -1196,6 +1241,7 @@ struct health healthBar = {X_BOUND / 2, Y_BOUND / 2, X_BOUND / 2, Y_BOUND / 2, X
 struct health green_health = {X_BOUND / 2, Y_BOUND / 2, X_BOUND / 2, Y_BOUND / 2, X_BOUND / 2, Y_BOUND / 2};
 
 // function prototypes
+void clean_projectile(int x, int y);
 void intialize_player(struct player *p);
 void initialize_proj(struct projectile *p);
 void initialize_healthbar(struct health *h);
@@ -1210,7 +1256,7 @@ void calculate_healthBar(struct health *h, struct health *g, struct player *p);
 void clean_zombie(int x, int y);
 void draw_zombie(int x, int y, int direction);
 void save_twoframes(int *prev_pos_x, int *prev_pox_y, int *prev2_pos_x, int *prev2_pos_y, int x_pos, int y_pos);
-void draw_projectile(int x, int y);
+void draw_projectile(int x, int y, int direction);
 void draw_barrell(int x, int y);
 void clean_barrell(int x, int y);
 void update_projectile(struct projectile *p, struct player *play);
@@ -1373,12 +1419,22 @@ int main(void)
         
 
             for (i = 0; i < MAX_PROJECTILES; i++) {
-                plot_pixel(projectiles[i].prev2_x, projectiles[i].prev2_y, background[projectiles[i].prev2_y][projectiles[i].prev2_x]);
+                printf("(%d,%d)\n", projectiles[i].prev2_x, projectiles[i].prev2_y);
+                replace_background(projectiles[i].prev2_x, projectiles[i].prev2_y, 40, 40);
                 if (projectiles[i].isActive) {
-                    draw_projectile(projectiles[i].x, projectiles[i].y);
+                    //clean_projectile(projectiles[i].prev2_x, projectiles[i].prev2_x, projectiles[i].direction);
+                    draw_projectile(projectiles[i].x, projectiles[i].y, projectiles[i].direction);
                 } 
 
-                if (!projectiles[i].isActive) shoot_projectile(byte1, byte2, byte3, &projectiles[i], player1);
+                if (!projectiles[i].isActive) {
+                    shoot_projectile(byte1, byte2, byte3, &projectiles[i], player1);
+                    if (projectiles[i].death_frame == 0) projectiles[i].death_frame += 1;
+                    
+                    if (projectiles[i].death_frame > 0 && projectiles[i].death_frame < 3) {
+                        clean_barrell(projectiles[i].x, projectiles[i].y);
+                        projectiles[i].death_frame += 1;
+                    }
+                }
 
                 save_twoframes(&projectiles[i].prev_x, &projectiles[i].prev_y, &projectiles[i].prev2_x, &projectiles[i].prev2_y, projectiles[i].x, projectiles[i].y);
                 update_projectile(&projectiles[i], &player1);
@@ -1484,6 +1540,9 @@ int main(void)
     }
 }
 
+void clean_projectile(int x, int y) {
+}
+
 void draw_background() {
     int i, j;
     for (i = 0; i < 240; i++)
@@ -1509,12 +1568,12 @@ void intialize_player(struct player *p) {
 }
 
 void initialize_proj(struct projectile *p) {
-    p->x = 0;
-    p->y = 0;
-    p->prev_x = 0;
-    p->prev_y = 0;
-    p->prev2_x = 0;
-    p->prev_y = 0;
+    p->x = X_BOUND / 2;
+    p->y = Y_BOUND / 2;
+    p->prev_x = X_BOUND / 2;
+    p->prev_y = Y_BOUND / 2;
+    p->prev2_x = X_BOUND / 2;
+    p->prev_y = Y_BOUND / 2;
     p->direction = 0;
     p->isActive = false;
     p->speed = BASE_PROJECTILE_SPEED;
@@ -1549,7 +1608,7 @@ void initialize_game() {
     initialize_healthbar(&green_health);
 
     for (i = 0; i < MAX_PROJECTILES; i++) {
-        struct projectile p = {0, 0, 0, 0, 0, 0, 0, false, BASE_PROJECTILE_SPEED};
+        struct projectile p = {X_BOUND / 2, Y_BOUND / 2, X_BOUND / 2, Y_BOUND / 2, X_BOUND / 2, Y_BOUND / 2, 0, false, BASE_PROJECTILE_SPEED, 0};
         projectiles[i] = p;
     }
 
@@ -1802,9 +1861,42 @@ void save_twoframes(int *prev_pos_x, int *prev_pox_y, int *prev2_pos_x, int *pre
     *prev_pox_y = y_pos;
 }
 
-void draw_projectile(int x, int y)
+void draw_projectile(int x, int y, int direction)
 {
-    plot_pixel(x, y, 0xFFFF);
+    int i, j;
+    if (direction == UP_CODE) {
+        for (i = 0; i < 12; i++)
+        {
+            for (j = 0; j < 2; j++)
+            {
+                if (dagger_up[i][j] != 0) plot_pixel(x - 7 + j, y - 7 + i, dagger_up[i][j]);
+            }
+        }
+    } else if (direction == DOWN_CODE) {
+        for (i = 0; i < 12; i++)
+        {
+            for (j = 0; j < 2; j++)
+            {
+                if (dagger_down[i][j] != 0) plot_pixel(x - 7 + j, y - 7 + i, dagger_down[i][j]);
+            }
+        }
+    } else if (direction == LEFT_CODE) {
+        for (i = 0; i < 2; i++)
+        {
+            for (j = 0; j < 12; j++)
+            {
+                if (dagger_left[i][j] != 0) plot_pixel(x - 7 + j, y - 7 + i, dagger_left[i][j]);
+            }
+        }
+    } else if (direction == RIGHT_CODE) {
+        for (i = 0; i < 2; i++)
+        {
+            for (j = 0; j < 12; j++)
+            {
+                if (dagger_right[i][j] != 0) plot_pixel(x - 7 + j, y - 7 + i, dagger_right[i][j]);
+            }
+        }
+    }
 }
 
 void draw_barrell(int x, int y)
@@ -1842,25 +1934,25 @@ void update_projectile(struct projectile *p, struct player *play)
         switch (p->direction)
         {
         case UP_CODE:
-            if (p->y > 9)
+            if (p->y > 20)
                 p->y = p->y - dy;
             else
                 p->isActive = false;
             break;
         case DOWN_CODE:
-            if (p->y < Y_BOUND - 9)
+            if (p->y < Y_BOUND - 20)
                 p->y = p->y + dy;
             else
                 p->isActive = false;
             break;
         case LEFT_CODE:
-            if (p->x > 9)
+            if (p->x > 20)
                 p->x = p->x - dx;
             else
                 p->isActive = false;
             break;
         case RIGHT_CODE:
-            if (p->x < X_BOUND - 9)
+            if (p->x < X_BOUND - 20)
                 p->x = p->x + dx;
             else
                 p->isActive = false;
