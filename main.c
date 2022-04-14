@@ -1211,6 +1211,8 @@ void plot_pixel(int x, int y, short int line_color);
 void draw_box(int x, int y, int w, short int color);
 void initialize_game();
 void draw_end_screen();
+void clear_healthBar(int x, int y);
+void clear_green(int x, int y);
 
 int main(void)
 {
@@ -1348,8 +1350,8 @@ int main(void)
                 }
             }
 
-            draw_healthBar(healthBar.prev2_x, healthBar.prev2_y, 0x0);
-            draw_healthBar(green_health.prev2_x, green_health.prev2_y, 0x0);
+            clear_healthBar(healthBar.prev2_x, healthBar.prev2_y);
+            clear_healthBar(green_health.prev2_x, green_health.prev2_y);
             //draw_box(player1.prev2_x, player1.prev2_y, 15, 0x0);
             replace_background(player1.prev2_x, player1.prev2_y, 30, 30);
         
@@ -1406,6 +1408,7 @@ int main(void)
                     }
                     // draw_box(zombies[i].prev2_x, zombies[i].prev2_y, 0x0);
                     clean_zombie(zombies[i].prev2_x, zombies[i].prev2_y);
+					
                     draw_zombie(zombies[i].x, zombies[i].y, zombies[i].direction);
                 }
                 save_twoframes(&zombies[i].prev_x, &zombies[i].prev_y, &zombies[i].prev2_x, &zombies[i].prev2_y, zombies[i].x, zombies[i].y);
@@ -1686,7 +1689,22 @@ void draw_healthBar(int x, int y, short int color)
         plot_pixel(x + i - (w-1)/2, y + 2 - y_offset, color);
     }
 
+}
 
+void clear_healthBar(int x, int y)
+{
+    int w = 51;
+    int h = 4;
+    int i;
+    int y_offset = 10;
+    for (i = 1; i < w; i++)
+    {
+        plot_pixel(x + i - (w-1)/2, y - 2 - y_offset, background[y - 2 - y_offset][x + i - (w-1)/2]);
+        plot_pixel(x + i - (w-1)/2, y - 1 - y_offset, background[y - 1 - y_offset][x + i - (w-1)/2]);
+        plot_pixel(x + i - (w-1)/2, y - y_offset, background[y - y_offset][x + i - (w-1)/2]);
+        plot_pixel(x + i - (w-1)/2, y + 1 - y_offset, background[y + 1 - y_offset][x + i - (w-1)/2]);
+        plot_pixel(x + i - (w-1)/2, y + 2 - y_offset, background[y + 2 - y_offset][x + i - (w-1)/2]);
+    }
 }
 void calculate_healthBar(struct health *h, struct health *g, struct player *p)
 {
@@ -1699,7 +1717,7 @@ void calculate_healthBar(struct health *h, struct health *g, struct player *p)
     int y_offset = 10;
     if (p->health == 100)
     {
-        draw_healthBar(h->x, h->y, green);
+        draw_healthBar(h->x, h->y,green);
     }
     else if (p->health == 0)
     {
@@ -1779,6 +1797,7 @@ void clean_zombie(int x, int y)
         }
     }
 }
+
 
 // save the position of a "object" two frames ago
 void save_twoframes(int *prev_pos_x, int *prev_pox_y, int *prev2_pos_x, int *prev2_pos_y, int x_pos, int y_pos)
@@ -1979,7 +1998,7 @@ void player_movement(int byte1, int byte2, int byte3, struct player *p)
     // standard movement
     if (byte3 == W_PRESS)
     { // W pressed, go up
-        if (p->y >= 17)
+        if (p->y >= 25)
         {
             boundary[p->x][p->y] = EMPTY_CODE;
             p->y = p->y - dy;
@@ -1990,7 +2009,7 @@ void player_movement(int byte1, int byte2, int byte3, struct player *p)
     }
     else if (byte3 == S_PRESS)
     { // S pressed, go down
-        if (p->y < Y_BOUND - 7)
+        if (p->y < Y_BOUND - 25)
         {
             boundary[p->x][p->y] = EMPTY_CODE;
             p->y = p->y + dy;
@@ -2024,7 +2043,7 @@ void player_movement(int byte1, int byte2, int byte3, struct player *p)
     int i;
     for (i = 0; i < MAX_ZOMBIES; i++)
     {
-        if (!p->invincible && ((p->x  >= zombies[i].x - 13) && (p->x <= zombies[i].x + 13)) && ((p->y >= zombies[i].y - 13) && (p->y <= zombies[i].y + 13)))		
+        if (!p->invincible && ((p->x  >= zombies[i].x - 13 ) && (p->x <= zombies[i].x + 13)) && ((p->y >= zombies[i].y - 13) && (p->y <= zombies[i].y + 13)))		
         {                     
             // printf("HIT ZOMBIE %d", zombie_id);
             p->health -= 1; // projectile hits zombie and the zombie's health will decrease
@@ -2045,7 +2064,7 @@ void draw_player(int x, int y, int direction)
     int img_size = 31;
     int r = 15;
     if (direction == UP_CODE)
-    { // player looking up
+    { // player looking upca
         for (i = 0; i < img_size; i++)
         {
             for (j = 0; j < img_size; j++)
@@ -2209,5 +2228,6 @@ void replace_background(int x, int y, int w, int l)
     }
 }
 
+	
 	
 	
