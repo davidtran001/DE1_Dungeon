@@ -929,6 +929,7 @@ int num_points = 0;
 int invincibility_counter = 0;
 bool title_step = false;
 int start_text_counter = 0;
+bool restart = false;
 
 // global structs
 struct player player1;
@@ -972,6 +973,7 @@ void draw_line(int x0, int y0, int x1, int y1, short int color);
 void plot_pixel(int x, int y, short int line_color);
 void draw_box(int x, int y, int w, short int color);
 void initialize_game();
+void draw_end_screen();
 
 int main(void)
 {
@@ -1062,7 +1064,7 @@ int main(void)
             }
         }
 
-        else if (player1.isAlive)
+        else if (player1.isAlive || restart)
         {
             if (title_step)
             {
@@ -1283,7 +1285,14 @@ int main(void)
             update_projectile(&proj8, &player1);
 
         } else {
-            // game over screen
+            draw_end_screen();
+			if (byte3 == 0x5A)
+            {
+			initialize_game();
+			restart = true;
+			title_screen = true;
+			
+			}// game over screen
         }
 
         // PS/2 keyboard input
@@ -1331,7 +1340,7 @@ void initialize_proj(struct projectile *p) {
 
 void initialize_healthbar(struct health *h) {
     h->x = X_BOUND / 2;
-    h->y = Y_BOUND / 2;
+    h->y = Y_BOUND / 2 ;
     h->prev_x = h->x;
     h->prev_y = h->y;
     h->prev2_x = h->x;
@@ -1398,6 +1407,18 @@ void draw_title_screen()
         for (j = 0; j < 320; j++)
         {
             plot_pixel(j, i, titlescreen[i][j]);
+        }
+    }
+}
+
+void draw_end_screen()
+{
+    int i, j;
+    for (i = 0; i < 240; i++)
+    {
+        for (j = 0; j < 320; j++)
+        {
+            plot_pixel(j, i, gameoverscreen[i][j]);
         }
     }
 }
@@ -1994,4 +2015,5 @@ void draw_box(int x, int y, int w, short int color)
     }
 }
 
+	
 	
