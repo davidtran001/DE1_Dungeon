@@ -1357,8 +1357,8 @@ int main(void)
         {
             int m, n, o;
             m = (num_points % 100) % 10;
-            n = (num_points % 100 - i) / 10;
-            o = (num_points - 10 * j - i) / 100;
+            n = (num_points % 100 - m) / 10;
+            o = (num_points - 10 * n - m) / 100;
             *HEX = (seg7[o] << 16) | (seg7[n] << 8) | seg7[m];
         }
 
