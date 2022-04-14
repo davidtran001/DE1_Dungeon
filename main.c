@@ -581,7 +581,7 @@ struct health
 
 // global variables
 volatile int pixel_buffer_start; // global variable
-volatile int *HEX = HEX3_HEX0_BASE;
+volatile int *HEX = (int *)HEX3_HEX0_BASE;
 char seg7[] = {0x3f, 0x06, 0x5b, 0x4f, 0x66, 0x6d, 0x7d, 0x07, 0x7f, 0x67};
 int player_color = 0xD376D7;
 int zombie_color = 0x00F000;
@@ -631,6 +631,7 @@ void draw_zombie(int x, int y, int direction);
 void save_twoframes(int *prev_pos_x, int *prev_pox_y, int *prev2_pos_x, int *prev2_pos_y, int x_pos, int y_pos);
 void draw_projectile(int x, int y);
 void draw_barrell(int x, int y);
+void clean_barrell(int x, int y);
 void update_projectile(struct projectile *p, struct player *play);
 void shoot_projectile(int byte1, int byte2, int byte3, struct projectile *p, struct player play);
 void player_movement(int byte1, int byte2, int byte3, struct player *p);
@@ -684,7 +685,7 @@ int main(void)
     unsigned char byte2 = 0;
     unsigned char byte3 = 0;
 
-    volatile int *HEX_ptr = (int *)HEX3_HEX0_BASE; // HEX display address
+   // volatile int *HEX_ptr = (int *)HEX3_HEX0_BASE; // HEX display address
 
     volatile int *PS2_ptr = (int *)PS2_BASE; // PS/2 port address
     int PS2_data, RVALID;
@@ -1028,7 +1029,7 @@ void draw_title_screen()
 
 void zombie_movement(int zombie_id, struct player *p)
 {
-    if (zombies[zombie_id].isAlive && zombies[zombie_id].y >= 7 && zombies[zombie_id].y < Y_BOUND - 7 && zombies[zombie_id].x >= 7 && zombies[zombie_id].x < X_BOUND - 7)
+    if (zombies[zombie_id].isAlive && zombies[zombie_id].y >= 7 && zombies[zombie_id].y <= Y_BOUND - 7 && zombies[zombie_id].x >= 7 && zombies[zombie_id].x <= X_BOUND - 7)
     {
         int dir_x = player1.x + 10 * zombie_id - zombies[zombie_id].x;
         int dir_y = player1.y + 10 * zombie_id - zombies[zombie_id].y;
@@ -1055,7 +1056,7 @@ struct barrell spawn_barrell(int barrell_id)
     int y_spawn = rand() % (Y_BOUND - 7 + 1 - 7) + 7;
     struct barrell b = {20 + barrell_id, x_spawn, y_spawn, true};
     num_barrells += 1;
-    int i, j;
+    //int i, j;
     boundary[x_spawn][y_spawn] = 20 + barrell_id;
     /*for (i = 0; i <= 6; i++) {
         for (j = 0; j <= 6; j++) {
@@ -1075,7 +1076,7 @@ struct zombie spawn_zombie(int zombie_id)
     int y_spawn = rand() % (Y_BOUND - 7 + 1 - 7) + 7;
     struct zombie z = {10 + zombie_id, x_spawn, y_spawn, x_spawn, y_spawn, x_spawn, y_spawn, 0, 1, true, true};
     num_zombies += 1;
-    int i, j;
+    //int i, j;
     boundary[x_spawn][y_spawn] = 10 + zombie_id;
     /*for (i = 0; i <= 6; i++) {
         for (j = 0; j <= 6; j++) {
@@ -1121,11 +1122,11 @@ void calculate_healthBar(struct health *h, struct health *g, struct player *p)
 
     else
     {
-        int k;
+        //int k;
         draw_healthBar(h->x, h->y, red);
         // for (k = 1; k <= p->health; k++)
         //{
-        int i, j;
+        int i;
         /*if ((p->health) % 2 != 0)
         {
             h->x = (p->health) / 2;
@@ -1235,7 +1236,7 @@ void clean_barrell(int x, int y)
 
 void update_projectile(struct projectile *p, struct player *play)
 {
-    int i, j, k, z;
+    int i, j, k;
     // update position of an active projectile
     if (p->isActive)
     {
@@ -1306,7 +1307,7 @@ void update_projectile(struct projectile *p, struct player *play)
                     }
                 }
 
-                if (((barrells[j].x >= play->x - 160) && (barrells[j].x <= play->x + 160)) && ((barrells[j].y >= play->y - 160) && (barrells[j].y <= play->y + 160)))
+                if (((barrells[j].x >= play->x - 60) && (barrells[j].x <= play->x + 60)) && ((barrells[j].y >= play->y - 60) && (barrells[j].y <= play->y + 60)))
                     play->health -= 10;
                 play->invincible = true;
                 if (play->health <= 0)
@@ -1440,8 +1441,8 @@ void player_movement(int byte1, int byte2, int byte3, struct player *p)
     int i;
     for (i = 0; i < MAX_ZOMBIES; i++)
     {
-        if (!p->invincible && ((p->x >= zombies[i].x - 6) && (p->x <= zombies[i].x + 6)) && ((p->y >= zombies[i].y - 6) && (p->y <= zombies[i].y + 6)))
-        {
+        if (!p->invincible && ((p->x  >= zombies[i].x - 6) && (p->x <= zombies[i].x + 6)) && ((p->y >= zombies[i].y - 6) && (p->y <= zombies[i].y + 6)))		
+        {                     
             // printf("HIT ZOMBIE %d", zombie_id);
             p->health -= 1; // projectile hits zombie and the zombie's health will decrease
             if (p->isAlive && p->health <= 0)
@@ -1606,3 +1607,5 @@ void draw_box(int x, int y, short int color)
         }
     }
 }
+
+	
