@@ -1610,9 +1610,10 @@ void zombie_movement(int zombie_id, struct player *p)
 
 // make new barrell struct
 struct barrell spawn_barrell(int barrell_id)
-{
-    int x_spawn = rand() % (X_BOUND - 7 + 1 - 7) + 7;
-    int y_spawn = rand() % (Y_BOUND - 7 + 1 - 7) + 7;
+{   
+    int z = 25;
+    int x_spawn = rand() % (X_BOUND - z + 1 - z) + z;
+    int y_spawn = rand() % (Y_BOUND - z + 1 - z) + z;
     struct barrell b = {20 + barrell_id, x_spawn, y_spawn, true};
     num_barrells += 1;
     //int i, j;
