@@ -603,6 +603,7 @@ bool title_screen = true;
 int num_points = 0;
 int invincibility_counter = 0;
 bool title_step = false;
+int start_text_counter = 0;
 
 // global structs
 struct player player1 = {X_BOUND / 2, Y_BOUND / 2, X_BOUND / 2, Y_BOUND / 2, X_BOUND / 2, Y_BOUND / 2, 0, 100, true, false};
@@ -745,7 +746,13 @@ int main(void)
         if (title_screen)
         {
             draw_title_screen();
-            draw_start_text();
+            if (start_text_counter < 4) {
+                draw_start_text();
+                start_text_counter += 1;
+            } else {
+                start_text_counter += 1;
+                if (start_text_counter == 8) start_text_counter = 0;
+            }
             if (byte3 == 0x5A)
             {
                 title_screen = false;
