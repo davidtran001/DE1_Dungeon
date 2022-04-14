@@ -1138,7 +1138,7 @@ const uint16_t START_TEXT[45][320] = {
 #define RIGHT_CODE 3
 
 // zombie constants
-#define MAX_ZOMBIES 5
+#define MAX_ZOMBIES 3
 #define MAX_BARRELLS 3
 #define MAX_PROJECTILES 1
 #define size 7
@@ -1244,7 +1244,6 @@ struct health green_health = {X_BOUND / 2, Y_BOUND / 2, X_BOUND / 2, Y_BOUND / 2
 // function prototypes
 void clean_projectile(int x, int y);
 void intialize_player(struct player *p);
-void initialize_proj(struct projectile *p);
 void initialize_healthbar(struct health *h);
 void intialize_game();
 void draw_title_screen();
@@ -1375,52 +1374,14 @@ int main(void)
                 draw_background();
                 title_step = false;
             }
-            // respawn zombies
-            if (num_zombies < MAX_ZOMBIES)
-            {
-                zombie_buffer += 1;
-                if (zombie_buffer >= 150)
-                {
-                    for (i = 0; i < MAX_ZOMBIES; i++)
-                    {
-                        if (!zombies[i].isAlive)
-                        {
-                            struct zombie z = spawn_zombie(i);
-                            zombies[i] = z;
-                            zombie_buffer = 0;
-                            break;
-                        }
-                    }
-                }
-            }
 
-            // respawn barrells
-            if (num_barrells < MAX_BARRELLS)
-            {
-                barrell_buffer += 1;
-                if (barrell_buffer >= 400)
-                {
-                    for (i = 0; i < MAX_BARRELLS; i++)
-                    {
-                        if (!barrells[i].isActive)
-                        {
-                            struct barrell b = spawn_barrell(i);
-                            barrells[i] = b;
-                            barrell_buffer = 0;
-                            break;
-                        }
-                    }
-                }
-            }
 
             clear_healthBar(healthBar.prev2_x, healthBar.prev2_y);
             clear_healthBar(green_health.prev2_x, green_health.prev2_y);
-
             replace_background(player1.prev2_x, player1.prev2_y, 34, 34);
         
-
+            // draw and update projectiles
             for (i = 0; i < MAX_PROJECTILES; i++) {
-                printf("(%d,%d)\n", projectiles[i].prev2_x, projectiles[i].prev2_y);
                 replace_background(projectiles[i].prev2_x, projectiles[i].prev2_y, 40, 40);
                 if (projectiles[i].isActive) {
                     //clean_projectile(projectiles[i].prev2_x, projectiles[i].prev2_x, projectiles[i].direction);
@@ -1441,41 +1402,44 @@ int main(void)
                 update_projectile(&projectiles[i], &player1);
             }
 
-
-            for (i = 0; i < MAX_BARRELLS; i++)
-            {
-                if (!barrells[i].isActive) {
-
-                    if (barrells[i].death_frame < 2) {
-                        clean_barrell(barrells[i].x, barrells[i].y);
-                        barrells[i].death_frame += 1;
-                    }
-                    
-
-                }
-
-            }
+            //  draw and clean barrells
             for (i = 0; i < MAX_BARRELLS; i++)
             {
                 if (barrells[i].isActive)
                 {
                     draw_barrell(barrells[i].x, barrells[i].y);
                 }
+                if (!barrells[i].isActive) {
+                    barrell_buffer += 1;
+                    if (barrells[i].death_frame < 2) {
+                        clean_barrell(barrells[i].x, barrells[i].y);
+                        barrells[i].death_frame += 1;
+                    } else if (barrell_buffer >= 400) {
+                        struct barrell b = spawn_barrell(i);
+                        barrells[i] = b;
+                        barrell_buffer = 0;
+
+                    }
+
+                }
+
             }
 
             for (i = 0; i < MAX_ZOMBIES; i++)
             {
-                if (update_zombie)
-                    update_zombie = false;
-                else
-                    update_zombie = true;
+                update_zombie = !update_zombie;
 
                 if (!zombies[i].isAlive)
                 {
+                    zombie_buffer += 1;
                     if (zombies[i].death_frame < 2) {
                         clean_zombie(zombies[i].prev2_x, zombies[i].prev2_y);
                         clean_zombie(zombies[i].x, zombies[i].y);
                         zombies[i].death_frame += 1;
+                    } else if (zombie_buffer == 100) {
+                        struct zombie z = spawn_zombie(i);
+                        zombies[i] = z;
+                        zombie_buffer = 0;
                     }
                 }
 
@@ -1485,9 +1449,7 @@ int main(void)
                     {
                         zombie_movement(i, &player1);
                     }
-                    // draw_box(zombies[i].prev2_x, zombies[i].prev2_y, 0x0);
-                    clean_zombie(zombies[i].prev2_x, zombies[i].prev2_y);
-                    					
+                    clean_zombie(zombies[i].prev2_x, zombies[i].prev2_y);           					
                     draw_zombie(zombies[i].x, zombies[i].y, zombies[i].direction);
                 }
                 save_twoframes(&zombies[i].prev_x, &zombies[i].prev_y, &zombies[i].prev2_x, &zombies[i].prev2_y, zombies[i].x, zombies[i].y);
@@ -1566,18 +1528,6 @@ void intialize_player(struct player *p) {
     p->health = 100;
     p->isAlive = true;
     p->invincible = false;
-}
-
-void initialize_proj(struct projectile *p) {
-    p->x = X_BOUND / 2;
-    p->y = Y_BOUND / 2;
-    p->prev_x = X_BOUND / 2;
-    p->prev_y = Y_BOUND / 2;
-    p->prev2_x = X_BOUND / 2;
-    p->prev_y = Y_BOUND / 2;
-    p->direction = 0;
-    p->isActive = false;
-    p->speed = BASE_PROJECTILE_SPEED;
 }
 
 void initialize_healthbar(struct health *h) {
@@ -1696,16 +1646,6 @@ struct barrell spawn_barrell(int barrell_id)
     int y_spawn = rand() % (Y_BOUND - z + 1 - z) + z;
     struct barrell b = {20 + barrell_id, x_spawn, y_spawn, true, 0};
     num_barrells += 1;
-    //int i, j;
-    boundary[x_spawn][y_spawn] = 20 + barrell_id;
-    /*for (i = 0; i <= 6; i++) {
-        for (j = 0; j <= 6; j++) {
-            boundary[x_spawn-i][y_spawn-j] = 10+zombie_id;
-            boundary[x_spawn-i][y_spawn+j] = 10+zombie_id;
-            boundary[x_spawn+i][y_spawn-j] = 10+zombie_id;
-            boundary[x_spawn+i][y_spawn+j] = 10+zombie_id;
-        }
-    }*/
     return b;
 }
 
@@ -1717,16 +1657,6 @@ struct zombie spawn_zombie(int zombie_id)
     int y_spawn = rand() % (Y_BOUND - r + 1 - r) + r;
     struct zombie z = {10 + zombie_id, x_spawn, y_spawn, x_spawn, y_spawn, x_spawn, y_spawn, 0, 1, true, true, 0};
     num_zombies += 1;
-    //int i, j;
-    boundary[x_spawn][y_spawn] = 10 + zombie_id;
-    /*for (i = 0; i <= 6; i++) {
-        for (j = 0; j <= 6; j++) {
-            boundary[x_spawn-i][y_spawn-j] = 10+zombie_id;
-            boundary[x_spawn-i][y_spawn+j] = 10+zombie_id;
-            boundary[x_spawn+i][y_spawn-j] = 10+zombie_id;
-            boundary[x_spawn+i][y_spawn+j] = 10+zombie_id;
-        }
-    }*/
     return z;
 }
 
@@ -1763,10 +1693,6 @@ void clear_healthBar(int x, int y)
 
 void calculate_healthBar(struct health *h, struct health *g, struct player *p)
 {
-    // h->x = p->x;
-    // h->y = p->y-10;
-    // if ((h->x - 25 >= 0) && (h->x + 25 <= X_BOUND) && (h->y -3 >=0) && (h->y + 3 <= Y_BOUND))
-    //{
     h->x = p->x - 6;
     h->y = p->y - 10;
     int y_offset = 10;
@@ -1781,23 +1707,9 @@ void calculate_healthBar(struct health *h, struct health *g, struct player *p)
 
     else
     {
-        //int k;
         draw_healthBar(h->x, h->y, red);
-        // for (k = 1; k <= p->health; k++)
-        //{
         int i;
-        /*if ((p->health) % 2 != 0)
-        {
-            h->x = (p->health) / 2;
-        }
-        else
-        {
-            p->health = p->health + 1;
-            h->x = (p->health) / 2;
-        }*/
-        /*int x = (h->x) - (100-p->health);
-        int y = h->y;
-        int a = 25*(p->health)/100;*/
+
         int x = h->x - 24;
         int y = h->y;
         int a = 50 * (p->health) / 100;
@@ -1812,21 +1724,11 @@ void calculate_healthBar(struct health *h, struct health *g, struct player *p)
             plot_pixel(x + i, y + 1 - y_offset, green);
             plot_pixel(x + i, y + 2 - y_offset, green);
         }
-        //}
+
     }
-    //}
+
 }
-/*int collision(struct zombie *z, struct player *p,  struct barrell *b, struct health *h){
-     if((z->x == p->x) || (z->x == b->x)||(z->x == h->x)||
-        (z->y == p->y) || (z->y == b->y)||(z->y == h->y)||
-        (p->x == b->x) || (p->x == h->x)||
-        (p->y == b->y) || (p->y == h->y)||
-        (b->x == h->x) || (b->y == h->y)){
-         return 1;
-        }else{
-            return 0;
-        }
-}*/
+
 void draw_zombie(int x, int y, int direction)
 {
     int i, j;
@@ -1962,12 +1864,12 @@ void update_projectile(struct projectile *p, struct player *play)
             break;
         }
 
-        // if boundary[x][y] is a int >= 10 then a zombie is in that position
+        // zombie hit detection
         for (i = 0; i < MAX_ZOMBIES; i++)
         {
-            if (zombies[i].isAlive && ((p->x >= zombies[i].x - 7) && (p->x <= zombies[i].x + 7)) && ((p->y >= zombies[i].y - 7) && (p->y <= zombies[i].y + 7)))
+            if (zombies[i].isAlive && ((p->x >= zombies[i].x - 15) && (p->x <= zombies[i].x + 15)) && ((p->y >= zombies[i].y - 15) && (p->y <= zombies[i].y + 15)))
             {
-                // printf("HIT ZOMBIE %d", zombie_id);
+
                 zombies[i].health -= 1; // projectile hits zombie and the zombie's health will decrease
                 if (zombies[i].isAlive && zombies[i].health <= 0)
                 { // if the zombie has <= 0 health then it is dead
@@ -2032,55 +1934,10 @@ void shoot_projectile(int byte1, int byte2, int byte3, struct projectile *p, str
 
 void player_movement(int byte1, int byte2, int byte3, struct player *p)
 {
-    if (byte2 == 0xF0)
-    { // W and D pressed, go diagonally up and right
+    if (byte2 == 0xF0) // user let go of key
+    { 
         return;
     }
-
-    /*// diagonal movement
-    if ((byte2 == D_PRESS && byte3 == W_PRESS) || (byte2 == W_PRESS && byte3 == D_PRESS)) { // W and D pressed, go diagonally up and right
-        if (player_pos[0] < X_BOUND-7 && player_pos[1] >= 7) {
-            boundary[player_pos[0]][player_pos[1]] = 0;
-            player_pos[0] = player_pos[0] + dx;
-            player_pos[1] = player_pos[1] - dy;
-            boundary[player_pos[0]][player_pos[1]] = 1;
-        }
-        player_direction = 0;
-        *RLEDs = 1;
-    }
-
-    else if ((byte2 == A_PRESS && byte3 == W_PRESS) || (byte2 == W_PRESS && byte3 == A_PRESS)) { // W and A pressed, go diagonally up and left
-        if (player_pos[0] >= 7 && player_pos[1] >= 7) {
-            boundary[player_pos[0]][player_pos[1]] = 0;
-            player_pos[0] = player_pos[0] - dx;
-            player_pos[1] = player_pos[1] - dy;
-            boundary[player_pos[0]][player_pos[1]] = 1;
-        }
-        player_direction = 0;
-        *RLEDs = 1;
-    }
-
-    else if ((byte3 == S_PRESS && byte2 == A_PRESS) || (byte2 == S_PRESS && byte3 == A_PRESS)) { // S and A pressed, go down and left
-        if (player_pos[0] >=7 && player_pos[1] < Y_BOUND-7) {
-            boundary[player_pos[0]][player_pos[1]] = 0;
-            player_pos[1] = player_pos[1] + dx;
-            player_pos[0] = player_pos[0] - dy;
-            boundary[player_pos[0]][player_pos[1]] = 1;
-        }
-        player_direction = 1;
-        *RLEDs = 2;
-    }
-
-    else if ((byte3 == S_PRESS && byte2 == D_PRESS) || (byte2 == S_PRESS && byte3 == D_PRESS)) { // S and D pressed, go down and right
-        if (player_pos[1] < Y_BOUND-7 && player_pos[0] < X_BOUND-7) {
-            boundary[player_pos[0]][player_pos[1]] = 0;
-            player_pos[1] = player_pos[1] + dx;
-            player_pos[0] = player_pos[0] + dy;
-            boundary[player_pos[0]][player_pos[1]] = 1;
-        }
-        player_direction = 1;
-        *RLEDs = 2;
-    }*/
 
     // standard movement
     if (byte3 == W_PRESS)
@@ -2127,22 +1984,6 @@ void player_movement(int byte1, int byte2, int byte3, struct player *p)
         p->direction = 3;
         *RLEDs = 8;
     }
-    int i;
-    for (i = 0; i < MAX_ZOMBIES; i++)
-    {
-        if (!p->invincible && ((p->x  >= zombies[i].x - 13 ) && (p->x <= zombies[i].x + 13)) && ((p->y >= zombies[i].y - 13) && (p->y <= zombies[i].y + 13)))		
-        {                                         
-            // printf("HIT ZOMBIE %d", zombie_id);
-            p->health -= 1; // projectile hits zombie and the zombie's health will decrease
-            if (p->isAlive && p->health <= 0)
-            { // if the zombie has <= 0 health then it is dead
-                p->isAlive = false;
-                p->invincible = true;
-            }
-
-            break;
-        }
-    }
 }
 
 void draw_player(int x, int y, int direction)
@@ -2163,7 +2004,7 @@ void draw_player(int x, int y, int direction)
             }
         }
     }
-    if (direction == DOWN_CODE)
+    else if (direction == DOWN_CODE)
     { // player looking down
         for (i = 0; i < img_size_h; i++)
         {
@@ -2174,7 +2015,7 @@ void draw_player(int x, int y, int direction)
             }
         }
     }
-    if (direction == LEFT_CODE)
+    else if (direction == LEFT_CODE)
     { // player looking left
         for (i = 0; i < img_size_h; i++)
         {
@@ -2185,7 +2026,7 @@ void draw_player(int x, int y, int direction)
             }
         }
     }
-    if (direction == RIGHT_CODE)
+    else if (direction == RIGHT_CODE)
     { // player looking right
         for (i = 0; i < img_size_h; i++)
         {
