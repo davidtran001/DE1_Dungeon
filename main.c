@@ -1,4 +1,5 @@
-#include <stdlib.h>
+
+	#include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include <time.h>
@@ -1707,7 +1708,7 @@ void calculate_healthBar(struct health *h, struct health *g, struct player *p)
     // h->y = p->y-10;
     // if ((h->x - 25 >= 0) && (h->x + 25 <= X_BOUND) && (h->y -3 >=0) && (h->y + 3 <= Y_BOUND))
     //{
-    h->x = p->x;
+    h->x = p->x - 6;
     h->y = p->y - 10;
     int y_offset = 10;
     if (p->health == 100)
@@ -2003,7 +2004,7 @@ void player_movement(int byte1, int byte2, int byte3, struct player *p)
     }
     else if (byte3 == S_PRESS)
     { // S pressed, go down
-        if (p->y < Y_BOUND - 25)
+        if (p->y <= Y_BOUND - 32)
         {
             boundary[p->x][p->y] = EMPTY_CODE;
             p->y = p->y + dy;
@@ -2223,4 +2224,6 @@ void replace_background(int x, int y, int w, int l)
         }
     }
 }
+	
+	
 	
