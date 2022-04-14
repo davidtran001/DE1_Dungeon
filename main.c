@@ -916,7 +916,6 @@ int green = 0x07E0;
 int red = 0x00f000;
 int dx = 2;
 int dy = 2;
-int d_projectile = 8;
 int boundary[X_BOUND][Y_BOUND];
 struct zombie zombies[MAX_ZOMBIES];
 int num_zombies = 0;
@@ -1006,7 +1005,9 @@ int main(void)
 
     // main loop
     while (1)
-    { // printf("health = %d\n",player1.health);
+    { 
+        //printf("health = %d\n",player1.health);
+
         // write num_points to HEX display
         //*HEX_ptr = num_points;
         // num_points = 105;
@@ -1313,7 +1314,7 @@ void intialize_player(struct player *p) {
     p->direction = 1;
     p->health = 100;
     p->isAlive = true;
-    p->invincible = true;
+    p->invincible = false;
 }
 
 void initialize_proj(struct projectile *p) {
@@ -1330,7 +1331,7 @@ void initialize_proj(struct projectile *p) {
 
 void initialize_healthbar(struct health *h) {
     h->x = X_BOUND / 2;
-    h->y = Y_BOUND / 2
+    h->y = Y_BOUND / 2;
     h->prev_x = h->x;
     h->prev_y = h->y;
     h->prev2_x = h->x;
@@ -1346,13 +1347,12 @@ void initialize_game() {
     update_zombie = true;
     num_barrells = 0;
     barrell_buffer = 0;
-    //bool title_screen = true;
     num_points = 0;
     invincibility_counter = 0;
     start_text_counter = 0;
 
     // edit global structs
-    intialize_player(&player1)
+    intialize_player(&player1);
 
     initialize_proj(&proj1);
     initialize_proj(&proj2);
