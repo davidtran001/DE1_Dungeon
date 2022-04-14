@@ -515,6 +515,7 @@ const uint16_t titlescreen[240][320] = {
 // zombie constants
 #define MAX_ZOMBIES 5
 #define MAX_BARRELLS 3
+#define size 7
 // projectile
 #define BASE_PROJECTILE_SPEED 8
 
