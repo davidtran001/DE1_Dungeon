@@ -6,7 +6,7 @@
 <img src="https://github.com/davidtran001/DE1_Dungeon/blob/main/images/gameplay2.png?raw=true">
 
 # How to run DE1 Dungeon
-There are two methods of running DE1 Dungeon
+**There are two methods of running DE1 Dungeon**
 1. Intel FPGA Monitor Program
 - Turn on DE1-SoC 
 - Create new project for DE1-SoC to run C code
