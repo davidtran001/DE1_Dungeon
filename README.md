@@ -5,7 +5,7 @@
 <img src="https://github.com/davidtran001/DE1_Dungeon/blob/main/images/gameplay.png?raw=true">
 <img src="https://github.com/davidtran001/DE1_Dungeon/blob/main/images/gameplay2.png?raw=true">
 
-# How to play
+# How to run DE1 Dungeon
 There are two methods of running DE1 Dungeon
 1. Intel FPGA Monitor Program
 - Turn on DE1-SoC 
@@ -23,3 +23,10 @@ There are two methods of running DE1 Dungeon
 moving up, “A” for moving left, “S” for moving down and “D” for moving right.
 - View the game through the VGA Pixel buffer, the direction you moved through
 LEDs and the points you got through Seven-segment displays.
+
+# How to play
+- 'W' to move up
+- 'A' to move left
+- 'S' to move down
+- 'D' to move right
+- 'I' to throw dagger
