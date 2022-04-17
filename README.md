@@ -11,6 +11,7 @@ all ghosts. Once the player’s health bar is completely red then it is game ove
 the game is to kill ghosts and survive as long as you can.
 
 # Gameplay
+<img src="https://github.com/davidtran001/DE1_Dungeon/blob/main/images/gameplay.gif?raw=true">
 <img src="https://github.com/davidtran001/DE1_Dungeon/blob/main/images/gameplay.png?raw=true">
 <img src="https://github.com/davidtran001/DE1_Dungeon/blob/main/images/gameplay2.png?raw=true">
 
