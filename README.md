@@ -3,11 +3,10 @@
 
 # Description
 DE1 Dungeon is a 2D top down action/survival game. The player controls a fearless knight
-that uses his golden dagger to defend himself. The player can control the knight with WASD
-for movement and I for throwing the dagger. Ghost will appear on the map and chase the
+that uses his golden dagger to defend himself. Ghost will appear on the map and chase the
 player around. In order to defend against the ghost, daggers can be thrown at enemy ghosts
-and explosion barrels. When a dagger hits a barrel it will explode, damaging the player and
-all ghosts. Once the player’s health bar is completely red then it is game over. The goal of
+and explosive barrels. When a dagger hits a barrel it will explode, damaging all entities within the explosion's radius. 
+Once the player’s health bar is completely red then it is game over. The goal of
 the game is to kill ghosts and survive as long as you can.
 
 # Gameplay
