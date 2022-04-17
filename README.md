@@ -2,7 +2,7 @@
 <img src="https://github.com/davidtran001/DE1_Dungeon/blob/main/images/title.png?raw=true">
 
 # Description
-DE1 Dungeon is a 2D top down action/survival game. The player controls a fearless knight
+DE1 Dungeon is a 2D top-down action/survival game. The player controls a fearless knight
 that uses his golden dagger to defend himself. Ghost will appear on the map and chase the
 player around. In order to defend against the ghost, daggers can be thrown at enemy ghosts
 and explosive barrels. When a dagger hits a barrel it will explode, damaging all entities within the explosion's radius. 
