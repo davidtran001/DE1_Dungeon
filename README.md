@@ -24,7 +24,7 @@ the game is to kill ghosts and survive as long as you can.
 - Press play button and switch to the monitor input to the DE1-SoC VGA port
 - Connect PS/2 keyboard
 
-2. CPUlator
+2. [CPUlator](https://cpulator.01xz.net/?sys=arm-de1soc)
 - Open the .c file
 - Press Compile
 - Press Continue
