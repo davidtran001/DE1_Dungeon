@@ -25,11 +25,10 @@ the game is to kill ghosts and survive as long as you can.
 - Connect PS/2 keyboard
 
 2. [CPUlator](https://cpulator.01xz.net/?sys=arm-de1soc)
-- Open the .c file
+- Open the main.c file
 - Press Compile
 - Press Continue
-- Press Enter through the PS/2 keyboard to start the game and press “W” for
-moving up, “A” for moving left, “S” for moving down and “D” for moving right.
+- Press the PS/2 keyboard box
 - View the game through the VGA Pixel buffer, the direction you moved through
 LEDs and the points you got through Seven-segment displays.
 
